@@ -1,0 +1,23 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+.nitro
+.tanstack
+.wrangler
+.output
+.vinxi
+__unconfig*
+# local data (SQLite database, private storage, dev mail outbox)
+.data
+# test artefacts
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+coverage
+*.tsbuildinfo

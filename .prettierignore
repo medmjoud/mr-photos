@@ -1,0 +1,5 @@
+package-lock.json
+src/routeTree.gen.ts
+.output
+.data
+drizzle/meta
