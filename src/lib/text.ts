@@ -81,3 +81,8 @@ export function parseTags(input: string | Array<string>): Array<string> {
   }
   return out
 }
+
+/** Unicode first-strong isolate: keeps user text (e.g. a Latin name) from breaking the surrounding RTL/LTR sentence. */
+export function bidi(s: string): string {
+  return `\u2068${s}\u2069`
+}

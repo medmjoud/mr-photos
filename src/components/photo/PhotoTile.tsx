@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { bidi } from '@/lib/text'
 import { useTranslations } from 'use-intl'
 import { useAppLocale } from '@/i18n/react'
 import { regionName } from '@/lib/regions'
@@ -38,9 +39,11 @@ export function PhotoTile({
         className="img-zoom scrim"
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-3 text-white sm:p-4 hover-device:translate-y-2 hover-device:opacity-0 hover-device:transition hover-device:duration-300 hover-device:group-hover:translate-y-0 hover-device:group-hover:opacity-100 hover-device:group-focus-visible:translate-y-0 hover-device:group-focus-visible:opacity-100">
-        <p className="line-clamp-2 font-display text-[1.05rem] leading-tight">{photo.title}</p>
+        <p dir="auto" className="line-clamp-2 font-display text-[1.05rem] leading-tight">
+          {photo.title}
+        </p>
         <p className="mt-1 text-micro text-white/80">
-          {t('by', { name: photo.authorName })} · {regionName(photo.regionSlug, locale)}
+          {t('by', { name: bidi(photo.authorName) })} · {regionName(photo.regionSlug, locale)}
         </p>
       </div>
       {photo.isDemo ? (

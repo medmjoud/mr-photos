@@ -90,7 +90,9 @@ function ReviewItemPage() {
               />
               {p.urgent ? <span className="text-micro font-bold text-danger">{t('queue.filters.urgent')}</span> : null}
             </div>
-            <h1 className="mt-3 text-display-md">{p.title}</h1>
+            <h1 className="mt-3 text-display-md" dir="auto">
+              {p.title}
+            </h1>
             {p.hiddenReason ? <p className="mt-2 text-small text-danger">{hiddenT(p.hiddenReason)}</p> : null}
           </header>
 
@@ -124,7 +126,11 @@ function ReviewItemPage() {
               </dt>
               <dd>{t('item.uploaded', { date: date(p.createdAt) })}</dd>
             </dl>
-            {p.description ? <p className="mt-4 whitespace-pre-line text-small text-ink-muted">{p.description}</p> : null}
+            {p.description ? (
+              <p dir="auto" className="mt-4 whitespace-pre-line text-small text-ink-muted">
+                {p.description}
+              </p>
+            ) : null}
             {p.tags.length ? <p className="mt-2 text-small text-ink-subtle">#{p.tags.join(' #')}</p> : null}
           </Section>
 

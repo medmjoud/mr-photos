@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { bidi } from '@/lib/text'
 import { useFormatter, useTranslations } from 'use-intl'
 import { getPhotographer } from '@/functions/public.functions'
 import { Masonry } from '@/components/photo/PhotoTile'
@@ -62,7 +63,9 @@ function PhotographerPage() {
         <div className="lg:col-span-7">
           <Avatar avatar={p.avatar} name={p.displayName} size={112} />
           <Eyebrow className="mt-8">{t('portfolio')}</Eyebrow>
-          <h1 className="mt-3 text-display-xl">{p.displayName}</h1>
+          <h1 className="mt-3 text-display-xl" dir="auto">
+            {p.displayName}
+          </h1>
           {p.isDemo ? <span className="mt-3 inline-block rounded-pill bg-warn px-2.5 py-0.5 text-micro font-bold text-bg">{common('demo')}</span> : null}
           <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-small text-ink-muted">
             {place ? (
@@ -74,7 +77,11 @@ function PhotographerPage() {
             <span>{t('since', { date: format.dateTime(new Date(p.since), { month: 'long', year: 'numeric' }) })}</span>
             <span className="tabular">{t('count', { count: p.photos.length })}</span>
           </p>
-          {p.bio ? <p className="mt-8 max-w-[60ch] text-body-lg whitespace-pre-line text-ink-muted">{p.bio}</p> : null}
+          {p.bio ? (
+            <p dir="auto" className="mt-8 max-w-[60ch] text-body-lg whitespace-pre-line text-ink-muted">
+              {p.bio}
+            </p>
+          ) : null}
           {p.website || p.instagram ? (
             <ul className="mt-6 flex flex-wrap gap-4 text-small">
               {p.website ? (
@@ -124,7 +131,7 @@ function PhotographerPage() {
         <aside className="lg:col-span-4 lg:col-start-9" aria-labelledby="contact-title">
           <div className="border-t border-line pt-6 lg:border-t-0 lg:pt-2">
             <h2 id="contact-title" className="text-title">
-              {contactT('title', { name: p.displayName })}
+              {contactT('title', { name: bidi(p.displayName) })}
             </h2>
             <div className="mt-4">
               <ContactPanel slug={p.slug} name={p.displayName} contact={p.contact} />

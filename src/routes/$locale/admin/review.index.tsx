@@ -70,7 +70,9 @@ function ReviewQueue() {
                     </span>
                   ) : null}
                 </div>
-                <h2 className="font-sans text-body font-semibold">{p.title}</h2>
+                <h2 dir="auto" className="font-sans text-body font-semibold">
+                  {p.title}
+                </h2>
                 <p className="text-small text-ink-muted">
                   {p.authorName} · {regionName(p.regionSlug, locale)} · {p.yearTaken}
                 </p>

@@ -62,7 +62,9 @@ function PhotographersPage() {
                     <Avatar avatar={p.avatar} name={p.displayName} size={64} />
                     <div className="min-w-0">
                       <p className="flex flex-wrap items-center gap-2">
-                        <span className="font-display text-display-md group-hover:text-accent-text">{p.displayName}</span>
+                        <span dir="auto" className="font-display text-display-md group-hover:text-accent-text">
+                          {p.displayName}
+                        </span>
                         {p.featured ? <span className="eyebrow">{t('featured')}</span> : null}
                         {p.isDemo ? <span className="rounded-pill bg-warn px-2 py-0.5 text-micro font-bold text-bg">{common('demo')}</span> : null}
                       </p>

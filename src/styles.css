@@ -398,8 +398,8 @@
   }
   [dir='rtl'] select.control {
     background-position:
-      1.15rem 1.15rem,
-      0.8rem 1.15rem;
+      0.8rem 1.15rem,
+      1.15rem 1.15rem;
   }
   input[type='checkbox'],
   input[type='radio'] {

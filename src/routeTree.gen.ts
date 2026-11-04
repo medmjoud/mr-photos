@@ -23,6 +23,7 @@ import { Route as LocaleForPhotographersRouteImport } from './routes/$locale/for
 import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
 import { Route as LocaleReportRouteImport } from './routes/$locale/report'
 import { Route as LocaleTermsRouteImport } from './routes/$locale/terms'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as FilesSplatRouteImport } from './routes/files/$'
 import { Route as LocaleAdminIndexRouteImport } from './routes/$locale/admin/index'
 import { Route as LocaleAdminChildSafetyRouteImport } from './routes/$locale/admin/child-safety'
@@ -119,6 +120,11 @@ const LocaleTermsRoute = LocaleTermsRouteImport.update({
   id: '/terms',
   path: '/terms',
   getParentRoute: () => LocaleRouteRoute,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const FilesSplatRoute = FilesSplatRouteImport.update({
   id: '/files/$',
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
+  '/api/health': typeof ApiHealthRoute
   '/files/$': typeof FilesSplatRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/admin/child-safety': typeof LocaleAdminChildSafetyRoute
@@ -305,6 +312,7 @@ export interface FileRoutesByTo {
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
+  '/api/health': typeof ApiHealthRoute
   '/files/$': typeof FilesSplatRoute
   '/$locale': typeof LocaleIndexRoute
   '/$locale/admin/child-safety': typeof LocaleAdminChildSafetyRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
+  '/api/health': typeof ApiHealthRoute
   '/files/$': typeof FilesSplatRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/admin/child-safety': typeof LocaleAdminChildSafetyRoute
@@ -392,6 +401,7 @@ export interface FileRouteTypes {
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
+    | '/api/health'
     | '/files/$'
     | '/$locale/'
     | '/$locale/admin/child-safety'
@@ -431,6 +441,7 @@ export interface FileRouteTypes {
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
+    | '/api/health'
     | '/files/$'
     | '/$locale'
     | '/$locale/admin/child-safety'
@@ -473,6 +484,7 @@ export interface FileRouteTypes {
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
+    | '/api/health'
     | '/files/$'
     | '/$locale/'
     | '/$locale/admin/child-safety'
@@ -507,6 +519,7 @@ export interface RootRouteChildren {
   LocaleRouteRoute: typeof LocaleRouteRouteWithChildren
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   FilesSplatRoute: typeof FilesSplatRoute
   ApiCronCleanupRoute: typeof ApiCronCleanupRoute
   ApiPhotosUploadRoute: typeof ApiPhotosUploadRoute
@@ -614,6 +627,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$locale/terms'
       preLoaderRoute: typeof LocaleTermsRouteImport
       parentRoute: typeof LocaleRouteRoute
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/files/$': {
       id: '/files/$'
@@ -893,6 +913,7 @@ const rootRouteChildren: RootRouteChildren = {
   LocaleRouteRoute: LocaleRouteRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiHealthRoute: ApiHealthRoute,
   FilesSplatRoute: FilesSplatRoute,
   ApiCronCleanupRoute: ApiCronCleanupRoute,
   ApiPhotosUploadRoute: ApiPhotosUploadRoute,

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { bidi } from '@/lib/text'
 import { useTranslations } from 'use-intl'
 import { explorePhotos } from '@/functions/public.functions'
 import { oneOf, posInt, slugParam, str } from '@/lib/search-params'
@@ -83,7 +84,7 @@ function Explore() {
       <header className="container-page pt-12 pb-8 md:pt-16">
         <Eyebrow>{t('title')}</Eyebrow>
         <h1 className="mt-4 max-w-[16ch] text-display-xl">
-          {region ? region.name[locale] : data.photographer ? t('byPhotographer', { name: data.photographer.displayName }) : t('title')}
+          {region ? region.name[locale] : data.photographer ? t('byPhotographer', { name: bidi(data.photographer.displayName) }) : t('title')}
         </h1>
         <p className="mt-5 max-w-[56ch] text-body-lg text-ink-muted">{region ? region.blurb[locale] : t('lead')}</p>
       </header>

@@ -1,0 +1,18 @@
+# Single-server deployment: the SQLite database (and local storage, if used)
+# live on the "soura-data" volume. Put Cloudflare (or Caddy/nginx) in front
+# for HTTPS. See README › Deployment.
+services:
+  soura:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: file:/app/.data/soura.db
+      STORAGE_LOCAL_DIR: /app/.data/storage
+    ports:
+      - "3000:3000"
+    volumes:
+      - soura-data:/app/.data
+
+volumes:
+  soura-data:

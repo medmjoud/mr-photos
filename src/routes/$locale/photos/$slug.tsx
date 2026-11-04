@@ -14,7 +14,7 @@ import { isLocale } from '@/i18n/config'
 import { categoryName } from '@/lib/categories'
 import { regionName } from '@/lib/regions'
 import { headTranslator, seo } from '@/lib/seo'
-import { idFromSegment } from '@/lib/text'
+import { bidi, idFromSegment } from '@/lib/text'
 
 export const Route = createFileRoute('/$locale/photos/$slug')({
   loader: async ({ params }) => {
@@ -108,7 +108,9 @@ function PhotoPage() {
           {photo.isDemo ? (
             <span className="mb-4 inline-block rounded-pill bg-warn px-2.5 py-0.5 text-micro font-bold text-bg">{common('demo')}</span>
           ) : null}
-          <h1 className="text-display-lg">{photo.title}</h1>
+          <h1 className="text-display-lg" dir="auto">
+            {photo.title}
+          </h1>
           <Link
             to="/$locale/photographers/$slug"
             params={{ locale, slug: photographer.slug }}
@@ -116,16 +118,20 @@ function PhotoPage() {
           >
             <Avatar avatar={photographer.avatar} name={photographer.displayName} size={44} />
             <span>
-              <span className="block font-semibold group-hover:text-accent-text">{t('by', { name: photo.authorName })}</span>
+              <span className="block font-semibold group-hover:text-accent-text">{t('by', { name: bidi(photo.authorName) })}</span>
               <span className="block text-small text-ink-muted">{t('seeProfile')}</span>
             </span>
           </Link>
-          {photo.description ? <p className="mt-8 max-w-[62ch] text-body-lg whitespace-pre-line text-ink-muted">{photo.description}</p> : null}
+          {photo.description ? (
+            <p dir="auto" className="mt-8 max-w-[62ch] text-body-lg whitespace-pre-line text-ink-muted">
+              {photo.description}
+            </p>
+          ) : null}
           {photo.tags.length ? (
             <ul className="mt-8 flex flex-wrap gap-2" aria-label={t('tags')}>
               {photo.tags.map((tag) => (
                 <li key={tag}>
-                  <Link to="/$locale/explore" params={{ locale }} search={{ q: tag }} className="chip">
+                  <Link to="/$locale/explore" params={{ locale }} search={{ q: tag }} className="chip" dir="auto">
                     #{tag}
                   </Link>
                 </li>
@@ -145,7 +151,9 @@ function PhotoPage() {
             {photo.locationText ? (
               <div>
                 <dt className="eyebrow">{t('place')}</dt>
-                <dd className="mt-1">{photo.locationText}</dd>
+                <dd className="mt-1" dir="auto">
+                  {photo.locationText}
+                </dd>
               </div>
             ) : null}
             <div>
@@ -164,7 +172,7 @@ function PhotoPage() {
 
           <section id="rights" className="mt-10 border-s-2 border-sand ps-5">
             <h2 className="eyebrow font-sans">{t('rightsTitle')}</h2>
-            <p className="mt-2 max-w-[62ch] text-small text-ink-muted">{t('rights', { author: photo.authorName })}</p>
+            <p className="mt-2 max-w-[62ch] text-small text-ink-muted">{t('rights', { author: bidi(photo.authorName) })}</p>
           </section>
         </div>
 
@@ -172,7 +180,7 @@ function PhotoPage() {
           <div className="lg:sticky lg:top-24">
             <h2 id="contact-title" className="flex items-center gap-2 text-title">
               <Icon name="message" size={20} className="text-sand" />
-              {contactT('title', { name: photographer.displayName })}
+              {contactT('title', { name: bidi(photographer.displayName) })}
             </h2>
             <div className="mt-4">
               <ContactPanel slug={photographer.slug} name={photographer.displayName} photoId={photo.id} contact={photographer.contact} />

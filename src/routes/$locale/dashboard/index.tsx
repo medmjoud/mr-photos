@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, createFileRoute, useLoaderData, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
+import { bidi } from '@/lib/text'
 import { useFormatter, useTranslations } from 'use-intl'
 import { deleteMyPhoto, listMyPhotos } from '@/functions/photos.functions'
 import { EmptyState, Eyebrow } from '@/components/ui/Editorial'
@@ -45,7 +46,7 @@ function Dashboard() {
       <header className="grid gap-8 md:grid-cols-12 md:items-end">
         <div className="md:col-span-7">
           <Eyebrow>{t('title')}</Eyebrow>
-          <h1 className="mt-4 text-display-xl">{t('greeting', { name: me?.displayName ?? '' })}</h1>
+          <h1 className="mt-4 text-display-xl">{t('greeting', { name: bidi(me?.displayName ?? '') })}</h1>
           <p className="mt-4 max-w-[52ch] text-ink-muted">{t('lead')}</p>
         </div>
         <div className="flex flex-wrap gap-3 md:col-span-5 md:justify-end">
@@ -135,7 +136,9 @@ function PhotoRow({ p }: { p: Item }) {
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={badge} />
         </div>
-        <h3 className="truncate font-sans text-body font-semibold">{p.title}</h3>
+        <h3 dir="auto" className="truncate font-sans text-body font-semibold">
+          {p.title}
+        </h3>
         <p className="text-small text-ink-muted">
           {regionName(p.regionSlug, locale)} · {t('uploadedOn', { date: format.dateTime(new Date(p.createdAt), { dateStyle: 'medium' }) })}
         </p>

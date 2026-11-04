@@ -1,4 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { bidi } from '@/lib/text'
 import { useTranslations } from 'use-intl'
 import { getHome } from '@/functions/public.functions'
 import { Photo } from '@/components/photo/Photo'
@@ -97,7 +98,7 @@ function Home() {
                 </Link>
                 <figcaption className="mt-3 text-small text-ink-subtle">
                   {t('heroCredit', {
-                    author: hero.authorName,
+                    author: bidi(hero.authorName),
                     place: [hero.locationText, regionName(hero.regionSlug, locale)].filter(Boolean).join(', '),
                   })}
                 </figcaption>
@@ -213,11 +214,17 @@ function Home() {
               <li key={p.slug} className="bg-bg">
                 <Link to="/$locale/photographers/$slug" params={{ locale, slug: p.slug }} className="group flex h-full flex-col gap-4 p-6">
                   <Avatar avatar={p.avatar} name={p.displayName} size={72} />
-                  <span className="font-display text-title group-hover:text-accent-text">{p.displayName}</span>
+                  <span dir="auto" className="font-display text-title group-hover:text-accent-text">
+                    {p.displayName}
+                  </span>
                   <span className="text-small text-ink-muted">
                     {[p.city, regionName(p.regionSlug, locale)].filter(Boolean).join(', ')}
                   </span>
-                  {p.bio ? <span className="line-clamp-3 text-small text-ink-subtle">{p.bio}</span> : null}
+                  {p.bio ? (
+                    <span dir="auto" className="line-clamp-3 text-small text-ink-subtle">
+                      {p.bio}
+                    </span>
+                  ) : null}
                 </Link>
               </li>
             ))}
