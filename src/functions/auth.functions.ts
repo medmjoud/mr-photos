@@ -13,7 +13,7 @@ import {
   issueToken,
   revokeAllSessions,
 } from '@/server/auth/session'
-import { fail } from '@/server/auth/guards'
+import { fail } from '@/server/http'
 import { consumeAll } from '@/server/ratelimit'
 import { requestIp } from '@/server/request'
 import { sendExistingAccountEmail, sendResetEmail, sendVerificationEmail } from '@/server/email'

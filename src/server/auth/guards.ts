@@ -1,7 +1,7 @@
 import { createMiddleware } from '@tanstack/react-start'
-import { setResponseStatus } from '@tanstack/react-start/server'
 import { canAccessAdmin, canUpload } from '@/lib/permissions'
 import { getSessionUser, toActor, type SessionUser } from './session'
+import { fail } from '../http'
 
 /**
  * Server-function middleware. Every protected server function MUST include
@@ -9,19 +9,6 @@ import { getSessionUser, toActor, type SessionUser } from './session'
  * Errors carry stable codes that the UI translates.
  */
 
-export class AppError extends Error {
-  constructor(
-    public code: string,
-    public status = 400,
-  ) {
-    super(code)
-  }
-}
-
-export function fail(code: string, status = 400): never {
-  setResponseStatus(status)
-  throw new AppError(code, status)
-}
 
 export const withUser = createMiddleware({ type: 'function' }).server(async ({ next }) => {
   const user = await getSessionUser()

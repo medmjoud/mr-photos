@@ -16,7 +16,7 @@ export interface EmailProvider {
 
 const consoleProvider: EmailProvider = {
   async send(message) {
-    const dir = join(process.cwd(), '.data', 'mail')
+    const dir = join(process.cwd(), env().DEV_MAIL_DIR)
     await mkdir(dir, { recursive: true })
     const file = join(dir, `${Date.now()}-${newId(6)}.json`)
     await writeFile(file, JSON.stringify({ ...message, sentAt: new Date().toISOString() }, null, 2))

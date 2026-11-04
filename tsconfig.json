@@ -15,6 +15,7 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "isolatedModules": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
     "noUnusedLocals": true,

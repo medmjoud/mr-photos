@@ -39,6 +39,8 @@ const schema = z.object({
   EMAIL_PROVIDER: z.enum(['console', 'resend']).default('console'),
   EMAIL_FROM: z.string().default('SOURA <no-reply@localhost>'),
   RESEND_API_KEY: z.string().optional(),
+  /** Where the console email provider writes messages (development/tests). */
+  DEV_MAIL_DIR: z.string().default('.data/mail'),
   /** Where urgent moderation alerts (urgent reports) are sent. Optional. */
   MODERATION_ALERT_EMAIL: z.string().optional(),
 

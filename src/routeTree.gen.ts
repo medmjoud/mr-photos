@@ -22,7 +22,12 @@ import { Route as LocalePhotographersRouteImport } from './routes/$locale/photog
 import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
 import { Route as LocaleReportRouteImport } from './routes/$locale/report'
 import { Route as LocaleTermsRouteImport } from './routes/$locale/terms'
+import { Route as FilesSplatRouteImport } from './routes/files/$'
 import { Route as LocaleAdminIndexRouteImport } from './routes/$locale/admin/index'
+import { Route as LocaleAdminChildSafetyRouteImport } from './routes/$locale/admin/child-safety'
+import { Route as LocaleAdminLogRouteImport } from './routes/$locale/admin/log'
+import { Route as LocaleAdminReportsRouteImport } from './routes/$locale/admin/reports'
+import { Route as LocaleAdminUsersRouteImport } from './routes/$locale/admin/users'
 import { Route as LocaleAuthCheckEmailRouteImport } from './routes/$locale/auth/check-email'
 import { Route as LocaleAuthForgotRouteImport } from './routes/$locale/auth/forgot'
 import { Route as LocaleAuthLoginRouteImport } from './routes/$locale/auth/login'
@@ -30,7 +35,16 @@ import { Route as LocaleAuthResetRouteImport } from './routes/$locale/auth/reset
 import { Route as LocaleAuthSignupRouteImport } from './routes/$locale/auth/signup'
 import { Route as LocaleAuthVerifyRouteImport } from './routes/$locale/auth/verify'
 import { Route as LocaleDashboardIndexRouteImport } from './routes/$locale/dashboard/index'
+import { Route as LocaleDashboardProfileRouteImport } from './routes/$locale/dashboard/profile'
 import { Route as LocaleDashboardUploadRouteImport } from './routes/$locale/dashboard/upload'
+import { Route as LocalePhotosSlugRouteImport } from './routes/$locale/photos/$slug'
+import { Route as ApiCronCleanupRouteImport } from './routes/api/cron/cleanup'
+import { Route as ApiPhotosUploadRouteImport } from './routes/api/photos/upload'
+import { Route as LocaleAdminReviewIndexRouteImport } from './routes/$locale/admin/review.index'
+import { Route as LocaleAdminReviewIdRouteImport } from './routes/$locale/admin/review.$id'
+import { Route as LocaleDashboardPhotosIdRouteImport } from './routes/$locale/dashboard/photos/$id'
+import { Route as MediaAUserIdFileRouteImport } from './routes/media/a/$userId/$file'
+import { Route as MediaPPhotoIdTokenFileRouteImport } from './routes/media/p/$photoId/$token/$file'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -97,9 +111,34 @@ const LocaleTermsRoute = LocaleTermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => LocaleRouteRoute,
 } as any)
+const FilesSplatRoute = FilesSplatRouteImport.update({
+  id: '/files/$',
+  path: '/files/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocaleAdminIndexRoute = LocaleAdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => LocaleAdminRouteRoute,
+} as any)
+const LocaleAdminChildSafetyRoute = LocaleAdminChildSafetyRouteImport.update({
+  id: '/child-safety',
+  path: '/child-safety',
+  getParentRoute: () => LocaleAdminRouteRoute,
+} as any)
+const LocaleAdminLogRoute = LocaleAdminLogRouteImport.update({
+  id: '/log',
+  path: '/log',
+  getParentRoute: () => LocaleAdminRouteRoute,
+} as any)
+const LocaleAdminReportsRoute = LocaleAdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => LocaleAdminRouteRoute,
+} as any)
+const LocaleAdminUsersRoute = LocaleAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
   getParentRoute: () => LocaleAdminRouteRoute,
 } as any)
 const LocaleAuthCheckEmailRoute = LocaleAuthCheckEmailRouteImport.update({
@@ -137,10 +176,55 @@ const LocaleDashboardIndexRoute = LocaleDashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleDashboardRouteRoute,
 } as any)
+const LocaleDashboardProfileRoute = LocaleDashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => LocaleDashboardRouteRoute,
+} as any)
 const LocaleDashboardUploadRoute = LocaleDashboardUploadRouteImport.update({
   id: '/upload',
   path: '/upload',
   getParentRoute: () => LocaleDashboardRouteRoute,
+} as any)
+const LocalePhotosSlugRoute = LocalePhotosSlugRouteImport.update({
+  id: '/photos/$slug',
+  path: '/photos/$slug',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
+const ApiCronCleanupRoute = ApiCronCleanupRouteImport.update({
+  id: '/api/cron/cleanup',
+  path: '/api/cron/cleanup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPhotosUploadRoute = ApiPhotosUploadRouteImport.update({
+  id: '/api/photos/upload',
+  path: '/api/photos/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocaleAdminReviewIndexRoute = LocaleAdminReviewIndexRouteImport.update({
+  id: '/review/',
+  path: '/review/',
+  getParentRoute: () => LocaleAdminRouteRoute,
+} as any)
+const LocaleAdminReviewIdRoute = LocaleAdminReviewIdRouteImport.update({
+  id: '/review/$id',
+  path: '/review/$id',
+  getParentRoute: () => LocaleAdminRouteRoute,
+} as any)
+const LocaleDashboardPhotosIdRoute = LocaleDashboardPhotosIdRouteImport.update({
+  id: '/photos/$id',
+  path: '/photos/$id',
+  getParentRoute: () => LocaleDashboardRouteRoute,
+} as any)
+const MediaAUserIdFileRoute = MediaAUserIdFileRouteImport.update({
+  id: '/media/a/$userId/$file',
+  path: '/media/a/$userId/$file',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaPPhotoIdTokenFileRoute = MediaPPhotoIdTokenFileRouteImport.update({
+  id: '/media/p/$photoId/$token/$file',
+  path: '/media/p/$photoId/$token/$file',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -156,16 +240,30 @@ export interface FileRoutesByFullPath {
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
+  '/files/$': typeof FilesSplatRoute
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/admin/child-safety': typeof LocaleAdminChildSafetyRoute
+  '/$locale/admin/log': typeof LocaleAdminLogRoute
+  '/$locale/admin/reports': typeof LocaleAdminReportsRoute
+  '/$locale/admin/users': typeof LocaleAdminUsersRoute
   '/$locale/auth/check-email': typeof LocaleAuthCheckEmailRoute
   '/$locale/auth/forgot': typeof LocaleAuthForgotRoute
   '/$locale/auth/login': typeof LocaleAuthLoginRoute
   '/$locale/auth/reset': typeof LocaleAuthResetRoute
   '/$locale/auth/signup': typeof LocaleAuthSignupRoute
   '/$locale/auth/verify': typeof LocaleAuthVerifyRoute
+  '/$locale/dashboard/profile': typeof LocaleDashboardProfileRoute
   '/$locale/dashboard/upload': typeof LocaleDashboardUploadRoute
+  '/$locale/photos/$slug': typeof LocalePhotosSlugRoute
+  '/api/cron/cleanup': typeof ApiCronCleanupRoute
+  '/api/photos/upload': typeof ApiPhotosUploadRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
   '/$locale/dashboard/': typeof LocaleDashboardIndexRoute
+  '/$locale/admin/review/$id': typeof LocaleAdminReviewIdRoute
+  '/$locale/dashboard/photos/$id': typeof LocaleDashboardPhotosIdRoute
+  '/media/a/$userId/$file': typeof MediaAUserIdFileRoute
+  '/$locale/admin/review/': typeof LocaleAdminReviewIndexRoute
+  '/media/p/$photoId/$token/$file': typeof MediaPPhotoIdTokenFileRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -177,16 +275,30 @@ export interface FileRoutesByTo {
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
+  '/files/$': typeof FilesSplatRoute
   '/$locale': typeof LocaleIndexRoute
+  '/$locale/admin/child-safety': typeof LocaleAdminChildSafetyRoute
+  '/$locale/admin/log': typeof LocaleAdminLogRoute
+  '/$locale/admin/reports': typeof LocaleAdminReportsRoute
+  '/$locale/admin/users': typeof LocaleAdminUsersRoute
   '/$locale/auth/check-email': typeof LocaleAuthCheckEmailRoute
   '/$locale/auth/forgot': typeof LocaleAuthForgotRoute
   '/$locale/auth/login': typeof LocaleAuthLoginRoute
   '/$locale/auth/reset': typeof LocaleAuthResetRoute
   '/$locale/auth/signup': typeof LocaleAuthSignupRoute
   '/$locale/auth/verify': typeof LocaleAuthVerifyRoute
+  '/$locale/dashboard/profile': typeof LocaleDashboardProfileRoute
   '/$locale/dashboard/upload': typeof LocaleDashboardUploadRoute
+  '/$locale/photos/$slug': typeof LocalePhotosSlugRoute
+  '/api/cron/cleanup': typeof ApiCronCleanupRoute
+  '/api/photos/upload': typeof ApiPhotosUploadRoute
   '/$locale/admin': typeof LocaleAdminIndexRoute
   '/$locale/dashboard': typeof LocaleDashboardIndexRoute
+  '/$locale/admin/review/$id': typeof LocaleAdminReviewIdRoute
+  '/$locale/dashboard/photos/$id': typeof LocaleDashboardPhotosIdRoute
+  '/media/a/$userId/$file': typeof MediaAUserIdFileRoute
+  '/$locale/admin/review': typeof LocaleAdminReviewIndexRoute
+  '/media/p/$photoId/$token/$file': typeof MediaPPhotoIdTokenFileRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -202,16 +314,30 @@ export interface FileRoutesById {
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
+  '/files/$': typeof FilesSplatRoute
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/admin/child-safety': typeof LocaleAdminChildSafetyRoute
+  '/$locale/admin/log': typeof LocaleAdminLogRoute
+  '/$locale/admin/reports': typeof LocaleAdminReportsRoute
+  '/$locale/admin/users': typeof LocaleAdminUsersRoute
   '/$locale/auth/check-email': typeof LocaleAuthCheckEmailRoute
   '/$locale/auth/forgot': typeof LocaleAuthForgotRoute
   '/$locale/auth/login': typeof LocaleAuthLoginRoute
   '/$locale/auth/reset': typeof LocaleAuthResetRoute
   '/$locale/auth/signup': typeof LocaleAuthSignupRoute
   '/$locale/auth/verify': typeof LocaleAuthVerifyRoute
+  '/$locale/dashboard/profile': typeof LocaleDashboardProfileRoute
   '/$locale/dashboard/upload': typeof LocaleDashboardUploadRoute
+  '/$locale/photos/$slug': typeof LocalePhotosSlugRoute
+  '/api/cron/cleanup': typeof ApiCronCleanupRoute
+  '/api/photos/upload': typeof ApiPhotosUploadRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
   '/$locale/dashboard/': typeof LocaleDashboardIndexRoute
+  '/$locale/admin/review/$id': typeof LocaleAdminReviewIdRoute
+  '/$locale/dashboard/photos/$id': typeof LocaleDashboardPhotosIdRoute
+  '/media/a/$userId/$file': typeof MediaAUserIdFileRoute
+  '/$locale/admin/review/': typeof LocaleAdminReviewIndexRoute
+  '/media/p/$photoId/$token/$file': typeof MediaPPhotoIdTokenFileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -228,16 +354,30 @@ export interface FileRouteTypes {
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
+    | '/files/$'
     | '/$locale/'
+    | '/$locale/admin/child-safety'
+    | '/$locale/admin/log'
+    | '/$locale/admin/reports'
+    | '/$locale/admin/users'
     | '/$locale/auth/check-email'
     | '/$locale/auth/forgot'
     | '/$locale/auth/login'
     | '/$locale/auth/reset'
     | '/$locale/auth/signup'
     | '/$locale/auth/verify'
+    | '/$locale/dashboard/profile'
     | '/$locale/dashboard/upload'
+    | '/$locale/photos/$slug'
+    | '/api/cron/cleanup'
+    | '/api/photos/upload'
     | '/$locale/admin/'
     | '/$locale/dashboard/'
+    | '/$locale/admin/review/$id'
+    | '/$locale/dashboard/photos/$id'
+    | '/media/a/$userId/$file'
+    | '/$locale/admin/review/'
+    | '/media/p/$photoId/$token/$file'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -249,16 +389,30 @@ export interface FileRouteTypes {
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
+    | '/files/$'
     | '/$locale'
+    | '/$locale/admin/child-safety'
+    | '/$locale/admin/log'
+    | '/$locale/admin/reports'
+    | '/$locale/admin/users'
     | '/$locale/auth/check-email'
     | '/$locale/auth/forgot'
     | '/$locale/auth/login'
     | '/$locale/auth/reset'
     | '/$locale/auth/signup'
     | '/$locale/auth/verify'
+    | '/$locale/dashboard/profile'
     | '/$locale/dashboard/upload'
+    | '/$locale/photos/$slug'
+    | '/api/cron/cleanup'
+    | '/api/photos/upload'
     | '/$locale/admin'
     | '/$locale/dashboard'
+    | '/$locale/admin/review/$id'
+    | '/$locale/dashboard/photos/$id'
+    | '/media/a/$userId/$file'
+    | '/$locale/admin/review'
+    | '/media/p/$photoId/$token/$file'
   id:
     | '__root__'
     | '/'
@@ -273,21 +427,40 @@ export interface FileRouteTypes {
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
+    | '/files/$'
     | '/$locale/'
+    | '/$locale/admin/child-safety'
+    | '/$locale/admin/log'
+    | '/$locale/admin/reports'
+    | '/$locale/admin/users'
     | '/$locale/auth/check-email'
     | '/$locale/auth/forgot'
     | '/$locale/auth/login'
     | '/$locale/auth/reset'
     | '/$locale/auth/signup'
     | '/$locale/auth/verify'
+    | '/$locale/dashboard/profile'
     | '/$locale/dashboard/upload'
+    | '/$locale/photos/$slug'
+    | '/api/cron/cleanup'
+    | '/api/photos/upload'
     | '/$locale/admin/'
     | '/$locale/dashboard/'
+    | '/$locale/admin/review/$id'
+    | '/$locale/dashboard/photos/$id'
+    | '/media/a/$userId/$file'
+    | '/$locale/admin/review/'
+    | '/media/p/$photoId/$token/$file'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LocaleRouteRoute: typeof LocaleRouteRouteWithChildren
+  FilesSplatRoute: typeof FilesSplatRoute
+  ApiCronCleanupRoute: typeof ApiCronCleanupRoute
+  ApiPhotosUploadRoute: typeof ApiPhotosUploadRoute
+  MediaAUserIdFileRoute: typeof MediaAUserIdFileRoute
+  MediaPPhotoIdTokenFileRoute: typeof MediaPPhotoIdTokenFileRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -383,11 +556,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleTermsRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
+    '/files/$': {
+      id: '/files/$'
+      path: '/files/$'
+      fullPath: '/files/$'
+      preLoaderRoute: typeof FilesSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$locale/admin/': {
       id: '/$locale/admin/'
       path: '/'
       fullPath: '/$locale/admin/'
       preLoaderRoute: typeof LocaleAdminIndexRouteImport
+      parentRoute: typeof LocaleAdminRouteRoute
+    }
+    '/$locale/admin/child-safety': {
+      id: '/$locale/admin/child-safety'
+      path: '/child-safety'
+      fullPath: '/$locale/admin/child-safety'
+      preLoaderRoute: typeof LocaleAdminChildSafetyRouteImport
+      parentRoute: typeof LocaleAdminRouteRoute
+    }
+    '/$locale/admin/log': {
+      id: '/$locale/admin/log'
+      path: '/log'
+      fullPath: '/$locale/admin/log'
+      preLoaderRoute: typeof LocaleAdminLogRouteImport
+      parentRoute: typeof LocaleAdminRouteRoute
+    }
+    '/$locale/admin/reports': {
+      id: '/$locale/admin/reports'
+      path: '/reports'
+      fullPath: '/$locale/admin/reports'
+      preLoaderRoute: typeof LocaleAdminReportsRouteImport
+      parentRoute: typeof LocaleAdminRouteRoute
+    }
+    '/$locale/admin/users': {
+      id: '/$locale/admin/users'
+      path: '/users'
+      fullPath: '/$locale/admin/users'
+      preLoaderRoute: typeof LocaleAdminUsersRouteImport
       parentRoute: typeof LocaleAdminRouteRoute
     }
     '/$locale/auth/check-email': {
@@ -439,6 +647,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleDashboardIndexRouteImport
       parentRoute: typeof LocaleDashboardRouteRoute
     }
+    '/$locale/dashboard/profile': {
+      id: '/$locale/dashboard/profile'
+      path: '/profile'
+      fullPath: '/$locale/dashboard/profile'
+      preLoaderRoute: typeof LocaleDashboardProfileRouteImport
+      parentRoute: typeof LocaleDashboardRouteRoute
+    }
     '/$locale/dashboard/upload': {
       id: '/$locale/dashboard/upload'
       path: '/upload'
@@ -446,28 +661,100 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleDashboardUploadRouteImport
       parentRoute: typeof LocaleDashboardRouteRoute
     }
+    '/$locale/photos/$slug': {
+      id: '/$locale/photos/$slug'
+      path: '/photos/$slug'
+      fullPath: '/$locale/photos/$slug'
+      preLoaderRoute: typeof LocalePhotosSlugRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/api/cron/cleanup': {
+      id: '/api/cron/cleanup'
+      path: '/api/cron/cleanup'
+      fullPath: '/api/cron/cleanup'
+      preLoaderRoute: typeof ApiCronCleanupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/photos/upload': {
+      id: '/api/photos/upload'
+      path: '/api/photos/upload'
+      fullPath: '/api/photos/upload'
+      preLoaderRoute: typeof ApiPhotosUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$locale/admin/review/': {
+      id: '/$locale/admin/review/'
+      path: '/review'
+      fullPath: '/$locale/admin/review/'
+      preLoaderRoute: typeof LocaleAdminReviewIndexRouteImport
+      parentRoute: typeof LocaleAdminRouteRoute
+    }
+    '/$locale/admin/review/$id': {
+      id: '/$locale/admin/review/$id'
+      path: '/review/$id'
+      fullPath: '/$locale/admin/review/$id'
+      preLoaderRoute: typeof LocaleAdminReviewIdRouteImport
+      parentRoute: typeof LocaleAdminRouteRoute
+    }
+    '/$locale/dashboard/photos/$id': {
+      id: '/$locale/dashboard/photos/$id'
+      path: '/photos/$id'
+      fullPath: '/$locale/dashboard/photos/$id'
+      preLoaderRoute: typeof LocaleDashboardPhotosIdRouteImport
+      parentRoute: typeof LocaleDashboardRouteRoute
+    }
+    '/media/a/$userId/$file': {
+      id: '/media/a/$userId/$file'
+      path: '/media/a/$userId/$file'
+      fullPath: '/media/a/$userId/$file'
+      preLoaderRoute: typeof MediaAUserIdFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media/p/$photoId/$token/$file': {
+      id: '/media/p/$photoId/$token/$file'
+      path: '/media/p/$photoId/$token/$file'
+      fullPath: '/media/p/$photoId/$token/$file'
+      preLoaderRoute: typeof MediaPPhotoIdTokenFileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface LocaleAdminRouteRouteChildren {
+  LocaleAdminChildSafetyRoute: typeof LocaleAdminChildSafetyRoute
+  LocaleAdminLogRoute: typeof LocaleAdminLogRoute
+  LocaleAdminReportsRoute: typeof LocaleAdminReportsRoute
+  LocaleAdminUsersRoute: typeof LocaleAdminUsersRoute
   LocaleAdminIndexRoute: typeof LocaleAdminIndexRoute
+  LocaleAdminReviewIdRoute: typeof LocaleAdminReviewIdRoute
+  LocaleAdminReviewIndexRoute: typeof LocaleAdminReviewIndexRoute
 }
 
 const LocaleAdminRouteRouteChildren: LocaleAdminRouteRouteChildren = {
+  LocaleAdminChildSafetyRoute: LocaleAdminChildSafetyRoute,
+  LocaleAdminLogRoute: LocaleAdminLogRoute,
+  LocaleAdminReportsRoute: LocaleAdminReportsRoute,
+  LocaleAdminUsersRoute: LocaleAdminUsersRoute,
   LocaleAdminIndexRoute: LocaleAdminIndexRoute,
+  LocaleAdminReviewIdRoute: LocaleAdminReviewIdRoute,
+  LocaleAdminReviewIndexRoute: LocaleAdminReviewIndexRoute,
 }
 
 const LocaleAdminRouteRouteWithChildren =
   LocaleAdminRouteRoute._addFileChildren(LocaleAdminRouteRouteChildren)
 
 interface LocaleDashboardRouteRouteChildren {
+  LocaleDashboardProfileRoute: typeof LocaleDashboardProfileRoute
   LocaleDashboardUploadRoute: typeof LocaleDashboardUploadRoute
   LocaleDashboardIndexRoute: typeof LocaleDashboardIndexRoute
+  LocaleDashboardPhotosIdRoute: typeof LocaleDashboardPhotosIdRoute
 }
 
 const LocaleDashboardRouteRouteChildren: LocaleDashboardRouteRouteChildren = {
+  LocaleDashboardProfileRoute: LocaleDashboardProfileRoute,
   LocaleDashboardUploadRoute: LocaleDashboardUploadRoute,
   LocaleDashboardIndexRoute: LocaleDashboardIndexRoute,
+  LocaleDashboardPhotosIdRoute: LocaleDashboardPhotosIdRoute,
 }
 
 const LocaleDashboardRouteRouteWithChildren =
@@ -491,6 +778,7 @@ interface LocaleRouteRouteChildren {
   LocaleAuthResetRoute: typeof LocaleAuthResetRoute
   LocaleAuthSignupRoute: typeof LocaleAuthSignupRoute
   LocaleAuthVerifyRoute: typeof LocaleAuthVerifyRoute
+  LocalePhotosSlugRoute: typeof LocalePhotosSlugRoute
 }
 
 const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
@@ -511,6 +799,7 @@ const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
   LocaleAuthResetRoute: LocaleAuthResetRoute,
   LocaleAuthSignupRoute: LocaleAuthSignupRoute,
   LocaleAuthVerifyRoute: LocaleAuthVerifyRoute,
+  LocalePhotosSlugRoute: LocalePhotosSlugRoute,
 }
 
 const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
@@ -520,6 +809,11 @@ const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LocaleRouteRoute: LocaleRouteRouteWithChildren,
+  FilesSplatRoute: FilesSplatRoute,
+  ApiCronCleanupRoute: ApiCronCleanupRoute,
+  ApiPhotosUploadRoute: ApiPhotosUploadRoute,
+  MediaAUserIdFileRoute: MediaAUserIdFileRoute,
+  MediaPPhotoIdTokenFileRoute: MediaPPhotoIdTokenFileRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

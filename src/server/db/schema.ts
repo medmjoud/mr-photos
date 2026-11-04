@@ -8,6 +8,7 @@
  *  - enums are stored as text and validated in code
  */
 import { sql } from 'drizzle-orm'
+import { REJECTION_REASONS, REPORT_REASONS } from '@/lib/codes'
 import {
   index,
   integer,
@@ -15,6 +16,9 @@ import {
   text,
   uniqueIndex,
 } from 'drizzle-orm/sqlite-core'
+
+/** JSON-serialisable value (used for log details so they can be sent to the admin UI). */
+export type JsonValue = string | number | boolean | null | Array<JsonValue> | { [key: string]: JsonValue }
 
 const now = sql`(cast(unixepoch('subsec') * 1000 as integer))`
 
@@ -141,22 +145,7 @@ export type AiStatus = (typeof AI_STATUSES)[number]
 export const HIDDEN_REASONS = ['reports', 'urgent_report', 'admin', 'csam'] as const
 export type HiddenReason = (typeof HIDDEN_REASONS)[number]
 
-export const REJECTION_REASONS = [
-  'nudity_sexual',
-  'graphic_violence',
-  'hate',
-  'humiliating',
-  'stolen',
-  'consent',
-  'not_mauritania',
-  'low_quality',
-  'screenshot',
-  'heavy_filter',
-  'watermark',
-  'duplicate',
-  'other',
-] as const
-export type RejectionReason = (typeof REJECTION_REASONS)[number]
+export { REJECTION_REASONS, type RejectionReason } from '@/lib/codes'
 
 export type PhotoVariant = {
   kind: 'thumb' | 'preview' | 'og' | 'review'
@@ -257,18 +246,7 @@ export const photos = sqliteTable(
 
 /* ---------------------------------------------------------------- reports */
 
-export const REPORT_REASONS = [
-  'csam',
-  'nudity_sexual',
-  'graphic_violence',
-  'hate',
-  'humiliating',
-  'stolen',
-  'privacy',
-  'not_mauritania',
-  'other',
-] as const
-export type ReportReason = (typeof REPORT_REASONS)[number]
+export { REPORT_REASONS, type ReportReason } from '@/lib/codes'
 export const REPORT_STATUSES = ['open', 'resolved', 'dismissed'] as const
 export const REPORT_SOURCES = ['button', 'takedown_form'] as const
 
@@ -306,7 +284,7 @@ export const moderationLog = sqliteTable(
     action: text('action').notNull(),
     targetType: text('target_type', { enum: ['photo', 'user', 'report', 'avatar', 'system'] }).notNull(),
     targetId: text('target_id').notNull(),
-    details: text('details', { mode: 'json' }).$type<Record<string, unknown>>(),
+    details: text('details', { mode: 'json' }).$type<Record<string, JsonValue>>(),
     createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull().default(now),
   },
   (t) => [index('modlog_target_idx').on(t.targetType, t.targetId), index('modlog_created_idx').on(t.createdAt)],

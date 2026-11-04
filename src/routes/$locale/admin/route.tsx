@@ -1,5 +1,6 @@
 import { Outlet, createFileRoute, notFound, redirect } from '@tanstack/react-router'
 import { checkAccess } from '@/functions/guards.functions'
+import { AdminNav } from '@/components/admin/AdminNav'
 
 /** UX guard: admins only. Non-admins get a 404 so the area is not advertised. */
 export const Route = createFileRoute('/$locale/admin')({
@@ -10,5 +11,14 @@ export const Route = createFileRoute('/$locale/admin')({
     }
     if (!access.isAdmin) throw notFound()
   },
-  component: Outlet,
+  component: AdminLayout,
 })
+
+function AdminLayout() {
+  return (
+    <>
+      <AdminNav />
+      <Outlet />
+    </>
+  )
+}
