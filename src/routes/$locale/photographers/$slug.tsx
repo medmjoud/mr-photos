@@ -63,7 +63,7 @@ function PhotographerPage() {
           <Avatar avatar={p.avatar} name={p.displayName} size={112} />
           <Eyebrow className="mt-8">{t('portfolio')}</Eyebrow>
           <h1 className="mt-3 text-display-xl">{p.displayName}</h1>
-          {p.isDemo ? <span className="mt-3 inline-block rounded-pill bg-warn px-2.5 py-0.5 text-micro font-bold text-black">{common('demo')}</span> : null}
+          {p.isDemo ? <span className="mt-3 inline-block rounded-pill bg-warn px-2.5 py-0.5 text-micro font-bold text-bg">{common('demo')}</span> : null}
           <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-small text-ink-muted">
             {place ? (
               <span className="inline-flex items-center gap-1.5">

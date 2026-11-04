@@ -41,7 +41,7 @@ export function PhotoTile({
         </p>
       </div>
       {photo.isDemo ? (
-        <span className="absolute start-2 top-2 z-10 rounded-pill bg-warn px-2 py-0.5 text-micro font-bold text-black">
+        <span className="absolute start-2 top-2 z-10 rounded-pill bg-warn px-2 py-0.5 text-micro font-bold text-bg">
           {common('demo')}
         </span>
       ) : null}

@@ -58,7 +58,7 @@ function ReviewQueue() {
               <div className="flex flex-1 flex-col gap-3 p-4">
                 <div className="flex flex-wrap items-center gap-2">
                   {p.urgent ? (
-                    <span className="inline-flex items-center gap-1 rounded-pill bg-danger px-2.5 py-0.5 text-micro font-bold text-black">
+                    <span className="inline-flex items-center gap-1 rounded-pill bg-danger px-2.5 py-0.5 text-micro font-bold text-bg">
                       <Icon name="alert" size={14} />
                       {t('filters.urgent')}
                     </span>

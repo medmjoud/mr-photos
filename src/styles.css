@@ -442,16 +442,19 @@
 
   /* CSS-columns masonry: no JS, no layout shift. */
   .masonry {
-    columns: 1;
-    column-gap: 0.75rem;
+    columns: 2;
+    column-gap: 0.5rem;
   }
   .masonry > * {
     break-inside: avoid;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
-  @media (min-width: 26rem) {
+  @media (min-width: 40rem) {
     .masonry {
-      columns: 2;
+      column-gap: 0.75rem;
+    }
+    .masonry > * {
+      margin-bottom: 0.75rem;
     }
   }
   @media (min-width: 56rem) {
@@ -553,6 +556,31 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Hero: a slow settle-in of the lead photograph (transform only). */
+  .hero-photo img {
+    animation: hero-settle 1.6s var(--ease-out) both;
+  }
+  /* Empty-state hero: region outlines draw themselves once. */
+  .hero-line {
+    stroke-dasharray: 2400;
+    stroke-dashoffset: 2400;
+    animation: hero-draw 2.4s var(--ease-in-out) forwards;
+  }
+}
+
+@keyframes hero-settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes hero-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 ::view-transition-old(root),
@@ -578,5 +606,8 @@
   .js [data-reveal]:not([data-in]) {
     opacity: 1;
     transform: none;
+  }
+  .hero-line {
+    stroke-dashoffset: 0;
   }
 }

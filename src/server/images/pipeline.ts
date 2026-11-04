@@ -83,7 +83,7 @@ export type RenderResult = {
   height: number
 }
 
-export const THUMB_WIDTHS = [480, 960] as const
+export const THUMB_WIDTHS = [480, 960, 1280] as const
 export const PREVIEW_EDGES = [1080] as const
 
 /**

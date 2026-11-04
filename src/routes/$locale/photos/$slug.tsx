@@ -106,7 +106,7 @@ function PhotoPage() {
       <div className="container-page grid gap-12 py-12 md:py-16 lg:grid-cols-12">
         <div className="lg:col-span-7">
           {photo.isDemo ? (
-            <span className="mb-4 inline-block rounded-pill bg-warn px-2.5 py-0.5 text-micro font-bold text-black">{common('demo')}</span>
+            <span className="mb-4 inline-block rounded-pill bg-warn px-2.5 py-0.5 text-micro font-bold text-bg">{common('demo')}</span>
           ) : null}
           <h1 className="text-display-lg">{photo.title}</h1>
           <Link

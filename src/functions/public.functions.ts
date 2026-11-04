@@ -16,7 +16,7 @@ import { locales } from '@/i18n/config'
 import { categorySlugs, orientations } from '@/lib/categories'
 import { regionSlugs, regions } from '@/lib/regions'
 import { REPORT_REASONS } from '@/lib/codes'
-import { cleanMultiline, searchTerms } from '@/lib/text'
+import { cleanMultiline, idFromSegment, searchTerms } from '@/lib/text'
 
 const locale = z.enum(locales)
 const photoId = z.string().regex(/^[a-z0-9]{16}$/)
@@ -419,4 +419,112 @@ export const regionsWithSamples = createServerFn({ method: 'GET' })
     }
     publicCache()
     return out
+  })
+
+/* ----------------------------------------------------------------- home */
+
+/** Everything the home page needs in one round-trip. Works with zero photos. */
+export const getHome = createServerFn({ method: 'GET' })
+  .validator(z.object({ locale }))
+  .handler(async ({ data }) => {
+    ensureWorker()
+    const db = await getDb()
+    const featured = await db
+      .select(baseSelect)
+      .from(schema.photos)
+      .innerJoin(schema.users, eq(schema.users.id, schema.photos.ownerId))
+      .innerJoin(schema.profiles, eq(schema.profiles.userId, schema.photos.ownerId))
+      .where(publicPhotoWhere())
+      .orderBy(desc(schema.photos.featured), desc(schema.photos.approvedAt))
+      .limit(9)
+    const all = await db
+      .select({ region: schema.photos.regionSlug, category: schema.photos.category, ownerId: schema.photos.ownerId })
+      .from(schema.photos)
+      .innerJoin(schema.users, eq(schema.users.id, schema.photos.ownerId))
+      .where(publicPhotoWhere())
+    const regionCounts: Record<string, number> = {}
+    const categoryCounts: Record<string, number> = {}
+    for (const r of all) {
+      regionCounts[r.region] = (regionCounts[r.region] ?? 0) + 1
+      categoryCounts[r.category] = (categoryCounts[r.category] ?? 0) + 1
+    }
+    // One sample per region for the map panel.
+    const samples = await db
+      .select(baseSelect)
+      .from(schema.photos)
+      .innerJoin(schema.users, eq(schema.users.id, schema.photos.ownerId))
+      .innerJoin(schema.profiles, eq(schema.profiles.userId, schema.photos.ownerId))
+      .where(publicPhotoWhere())
+      .orderBy(desc(schema.photos.featured), desc(schema.photos.approvedAt))
+      .limit(300)
+    const regionSamples: Record<string, ReturnType<typeof toPublicPhoto>> = {}
+    for (const r of samples) regionSamples[r.photo.regionSlug] ??= toPublicPhoto(r.photo, owner(r), data.locale)
+
+    const owners = new Map<string, number>()
+    for (const r of all) owners.set(r.ownerId, (owners.get(r.ownerId) ?? 0) + 1)
+    const profs = owners.size
+      ? await db
+          .select()
+          .from(schema.profiles)
+          .where(inArray(schema.profiles.userId, [...owners.keys()]))
+      : []
+    const photographers = profs
+      .sort((a, b) => Number(b.featured) - Number(a.featured) || (owners.get(b.userId) ?? 0) - (owners.get(a.userId) ?? 0))
+      .slice(0, 4)
+      .map((p) => ({
+        slug: p.slug,
+        displayName: p.displayName,
+        city: p.city,
+        regionSlug: p.regionSlug,
+        bio: p.bio.slice(0, 160),
+        avatar: publicAvatar(p),
+        count: owners.get(p.userId) ?? 0,
+        isDemo: p.isDemo,
+      }))
+    publicCache()
+    return {
+      featured: featured.map((r) => toPublicPhoto(r.photo, owner(r), data.locale)),
+      regionCounts,
+      categoryCounts,
+      regionSamples,
+      photographers,
+      totals: { photos: all.length, photographers: owners.size, regions: Object.keys(regionCounts).length },
+    }
+  })
+
+/* ------------------------------------------------------------- takedown */
+
+export const submitTakedown = createServerFn({ method: 'POST' })
+  .validator(
+    z.object({
+      name: z.string().trim().min(2).max(100),
+      email: z.string().trim().toLowerCase().pipe(z.email()).pipe(z.string().max(254)),
+      photoUrl: z.string().trim().max(500).default(''),
+      reason: z.enum(REPORT_REASONS),
+      details: z.string().max(4000).transform(cleanMultiline).pipe(z.string().min(10)),
+      goodFaith: z.literal(true),
+    }),
+  )
+  .handler(async ({ data }) => {
+    const ip = requestIp()
+    const limited = await consumeAll([
+      { key: `takedown:ip:${ip}:h`, limit: 5, windowSeconds: 3600 },
+      { key: `takedown:ip:${ip}:d`, limit: 20, windowSeconds: 86_400 },
+    ])
+    if (!limited.ok) fail('rate_limited', 429)
+    const segment = /\/photos\/([a-z0-9-]+)/.exec(data.photoUrl)?.[1] ?? ''
+    const id = segment ? idFromSegment(segment) : null
+    const db = await getDb()
+    const photo = id ? await db.select({ id: schema.photos.id }).from(schema.photos).where(eq(schema.photos.id, id)).get() : undefined
+    await createReport({
+      photoId: photo?.id ?? null,
+      reason: data.reason,
+      details: data.details,
+      reporterHash: await visitorHash(ip, requestUserAgent()),
+      source: 'takedown_form',
+      reporterName: data.name,
+      reporterEmail: data.email,
+      photoUrl: data.photoUrl,
+    })
+    return { ok: true as const }
   })

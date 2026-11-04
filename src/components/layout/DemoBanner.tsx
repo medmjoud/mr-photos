@@ -7,7 +7,7 @@ export function DemoBanner() {
   const t = useTranslations('common')
   if (!hasDemo) return null
   return (
-    <div className="bg-warn px-4 py-1.5 text-center text-micro font-semibold text-black" role="note">
+    <div className="bg-warn px-4 py-1.5 text-center text-micro font-semibold text-bg" role="note">
       {t('demoNotice')}
     </div>
   )
