@@ -104,3 +104,27 @@ export async function waitForProcessing(title: string) {
     .not.toBe('not_run')
   return (await photoByTitle(title))!
 }
+
+export async function approveAsAdmin(page: Page, photoId: string, alt = 'Description alternative de la photo de test') {
+  await page.goto(`/fr/admin/review/${photoId}`)
+  await page.getByLabel('Texte alternatif (français)').fill(alt)
+  await page.getByRole('button', { name: 'Valider et publier' }).click()
+  await expect(page.getByText('Photo publiée.')).toBeVisible()
+}
+
+export async function fillProfileContacts(page: Page, phone: string, email: string) {
+  await page.goto('/fr/dashboard/profile')
+  await page.getByLabel('Numéro WhatsApp').fill(phone)
+  await page.getByLabel('Afficher le bouton WhatsApp').check()
+  await page.getByLabel('E-mail de contact').fill(email)
+  await page.getByLabel('Afficher le bouton e-mail').check()
+  await page.getByRole('button', { name: 'Enregistrer' }).click()
+  await expect(page.getByText('Profil enregistré.')).toBeVisible()
+}
+
+export async function sql(query: string, args: Array<string | number | null> = []) {
+  const c = db()
+  const r = await c.execute({ sql: query, args })
+  c.close()
+  return r.rows
+}

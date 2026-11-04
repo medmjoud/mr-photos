@@ -18,7 +18,6 @@ import { Route as LocaleContentRulesRouteImport } from './routes/$locale/content
 import { Route as LocaleDashboardRouteRouteImport } from './routes/$locale/dashboard/route'
 import { Route as LocaleExploreRouteImport } from './routes/$locale/explore'
 import { Route as LocaleForPhotographersRouteImport } from './routes/$locale/for-photographers'
-import { Route as LocalePhotographersRouteImport } from './routes/$locale/photographers'
 import { Route as LocalePrivacyRouteImport } from './routes/$locale/privacy'
 import { Route as LocaleReportRouteImport } from './routes/$locale/report'
 import { Route as LocaleTermsRouteImport } from './routes/$locale/terms'
@@ -37,9 +36,12 @@ import { Route as LocaleAuthVerifyRouteImport } from './routes/$locale/auth/veri
 import { Route as LocaleDashboardIndexRouteImport } from './routes/$locale/dashboard/index'
 import { Route as LocaleDashboardProfileRouteImport } from './routes/$locale/dashboard/profile'
 import { Route as LocaleDashboardUploadRouteImport } from './routes/$locale/dashboard/upload'
+import { Route as LocalePhotographersIndexRouteImport } from './routes/$locale/photographers/index'
+import { Route as LocalePhotographersSlugRouteImport } from './routes/$locale/photographers/$slug'
 import { Route as LocalePhotosSlugRouteImport } from './routes/$locale/photos/$slug'
 import { Route as ApiCronCleanupRouteImport } from './routes/api/cron/cleanup'
 import { Route as ApiPhotosUploadRouteImport } from './routes/api/photos/upload'
+import { Route as ApiProfileAvatarRouteImport } from './routes/api/profile/avatar'
 import { Route as LocaleAdminReviewIndexRouteImport } from './routes/$locale/admin/review.index'
 import { Route as LocaleAdminReviewIdRouteImport } from './routes/$locale/admin/review.$id'
 import { Route as LocaleDashboardPhotosIdRouteImport } from './routes/$locale/dashboard/photos/$id'
@@ -89,11 +91,6 @@ const LocaleExploreRoute = LocaleExploreRouteImport.update({
 const LocaleForPhotographersRoute = LocaleForPhotographersRouteImport.update({
   id: '/for-photographers',
   path: '/for-photographers',
-  getParentRoute: () => LocaleRouteRoute,
-} as any)
-const LocalePhotographersRoute = LocalePhotographersRouteImport.update({
-  id: '/photographers',
-  path: '/photographers',
   getParentRoute: () => LocaleRouteRoute,
 } as any)
 const LocalePrivacyRoute = LocalePrivacyRouteImport.update({
@@ -186,6 +183,17 @@ const LocaleDashboardUploadRoute = LocaleDashboardUploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => LocaleDashboardRouteRoute,
 } as any)
+const LocalePhotographersIndexRoute =
+  LocalePhotographersIndexRouteImport.update({
+    id: '/photographers/',
+    path: '/photographers/',
+    getParentRoute: () => LocaleRouteRoute,
+  } as any)
+const LocalePhotographersSlugRoute = LocalePhotographersSlugRouteImport.update({
+  id: '/photographers/$slug',
+  path: '/photographers/$slug',
+  getParentRoute: () => LocaleRouteRoute,
+} as any)
 const LocalePhotosSlugRoute = LocalePhotosSlugRouteImport.update({
   id: '/photos/$slug',
   path: '/photos/$slug',
@@ -199,6 +207,11 @@ const ApiCronCleanupRoute = ApiCronCleanupRouteImport.update({
 const ApiPhotosUploadRoute = ApiPhotosUploadRouteImport.update({
   id: '/api/photos/upload',
   path: '/api/photos/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProfileAvatarRoute = ApiProfileAvatarRouteImport.update({
+  id: '/api/profile/avatar',
+  path: '/api/profile/avatar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocaleAdminReviewIndexRoute = LocaleAdminReviewIndexRouteImport.update({
@@ -236,7 +249,6 @@ export interface FileRoutesByFullPath {
   '/$locale/content-rules': typeof LocaleContentRulesRoute
   '/$locale/explore': typeof LocaleExploreRoute
   '/$locale/for-photographers': typeof LocaleForPhotographersRoute
-  '/$locale/photographers': typeof LocalePhotographersRoute
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
@@ -254,11 +266,14 @@ export interface FileRoutesByFullPath {
   '/$locale/auth/verify': typeof LocaleAuthVerifyRoute
   '/$locale/dashboard/profile': typeof LocaleDashboardProfileRoute
   '/$locale/dashboard/upload': typeof LocaleDashboardUploadRoute
+  '/$locale/photographers/$slug': typeof LocalePhotographersSlugRoute
   '/$locale/photos/$slug': typeof LocalePhotosSlugRoute
   '/api/cron/cleanup': typeof ApiCronCleanupRoute
   '/api/photos/upload': typeof ApiPhotosUploadRoute
+  '/api/profile/avatar': typeof ApiProfileAvatarRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
   '/$locale/dashboard/': typeof LocaleDashboardIndexRoute
+  '/$locale/photographers/': typeof LocalePhotographersIndexRoute
   '/$locale/admin/review/$id': typeof LocaleAdminReviewIdRoute
   '/$locale/dashboard/photos/$id': typeof LocaleDashboardPhotosIdRoute
   '/media/a/$userId/$file': typeof MediaAUserIdFileRoute
@@ -271,7 +286,6 @@ export interface FileRoutesByTo {
   '/$locale/content-rules': typeof LocaleContentRulesRoute
   '/$locale/explore': typeof LocaleExploreRoute
   '/$locale/for-photographers': typeof LocaleForPhotographersRoute
-  '/$locale/photographers': typeof LocalePhotographersRoute
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
@@ -289,11 +303,14 @@ export interface FileRoutesByTo {
   '/$locale/auth/verify': typeof LocaleAuthVerifyRoute
   '/$locale/dashboard/profile': typeof LocaleDashboardProfileRoute
   '/$locale/dashboard/upload': typeof LocaleDashboardUploadRoute
+  '/$locale/photographers/$slug': typeof LocalePhotographersSlugRoute
   '/$locale/photos/$slug': typeof LocalePhotosSlugRoute
   '/api/cron/cleanup': typeof ApiCronCleanupRoute
   '/api/photos/upload': typeof ApiPhotosUploadRoute
+  '/api/profile/avatar': typeof ApiProfileAvatarRoute
   '/$locale/admin': typeof LocaleAdminIndexRoute
   '/$locale/dashboard': typeof LocaleDashboardIndexRoute
+  '/$locale/photographers': typeof LocalePhotographersIndexRoute
   '/$locale/admin/review/$id': typeof LocaleAdminReviewIdRoute
   '/$locale/dashboard/photos/$id': typeof LocaleDashboardPhotosIdRoute
   '/media/a/$userId/$file': typeof MediaAUserIdFileRoute
@@ -310,7 +327,6 @@ export interface FileRoutesById {
   '/$locale/content-rules': typeof LocaleContentRulesRoute
   '/$locale/explore': typeof LocaleExploreRoute
   '/$locale/for-photographers': typeof LocaleForPhotographersRoute
-  '/$locale/photographers': typeof LocalePhotographersRoute
   '/$locale/privacy': typeof LocalePrivacyRoute
   '/$locale/report': typeof LocaleReportRoute
   '/$locale/terms': typeof LocaleTermsRoute
@@ -328,11 +344,14 @@ export interface FileRoutesById {
   '/$locale/auth/verify': typeof LocaleAuthVerifyRoute
   '/$locale/dashboard/profile': typeof LocaleDashboardProfileRoute
   '/$locale/dashboard/upload': typeof LocaleDashboardUploadRoute
+  '/$locale/photographers/$slug': typeof LocalePhotographersSlugRoute
   '/$locale/photos/$slug': typeof LocalePhotosSlugRoute
   '/api/cron/cleanup': typeof ApiCronCleanupRoute
   '/api/photos/upload': typeof ApiPhotosUploadRoute
+  '/api/profile/avatar': typeof ApiProfileAvatarRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
   '/$locale/dashboard/': typeof LocaleDashboardIndexRoute
+  '/$locale/photographers/': typeof LocalePhotographersIndexRoute
   '/$locale/admin/review/$id': typeof LocaleAdminReviewIdRoute
   '/$locale/dashboard/photos/$id': typeof LocaleDashboardPhotosIdRoute
   '/media/a/$userId/$file': typeof MediaAUserIdFileRoute
@@ -350,7 +369,6 @@ export interface FileRouteTypes {
     | '/$locale/content-rules'
     | '/$locale/explore'
     | '/$locale/for-photographers'
-    | '/$locale/photographers'
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
@@ -368,11 +386,14 @@ export interface FileRouteTypes {
     | '/$locale/auth/verify'
     | '/$locale/dashboard/profile'
     | '/$locale/dashboard/upload'
+    | '/$locale/photographers/$slug'
     | '/$locale/photos/$slug'
     | '/api/cron/cleanup'
     | '/api/photos/upload'
+    | '/api/profile/avatar'
     | '/$locale/admin/'
     | '/$locale/dashboard/'
+    | '/$locale/photographers/'
     | '/$locale/admin/review/$id'
     | '/$locale/dashboard/photos/$id'
     | '/media/a/$userId/$file'
@@ -385,7 +406,6 @@ export interface FileRouteTypes {
     | '/$locale/content-rules'
     | '/$locale/explore'
     | '/$locale/for-photographers'
-    | '/$locale/photographers'
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
@@ -403,11 +423,14 @@ export interface FileRouteTypes {
     | '/$locale/auth/verify'
     | '/$locale/dashboard/profile'
     | '/$locale/dashboard/upload'
+    | '/$locale/photographers/$slug'
     | '/$locale/photos/$slug'
     | '/api/cron/cleanup'
     | '/api/photos/upload'
+    | '/api/profile/avatar'
     | '/$locale/admin'
     | '/$locale/dashboard'
+    | '/$locale/photographers'
     | '/$locale/admin/review/$id'
     | '/$locale/dashboard/photos/$id'
     | '/media/a/$userId/$file'
@@ -423,7 +446,6 @@ export interface FileRouteTypes {
     | '/$locale/content-rules'
     | '/$locale/explore'
     | '/$locale/for-photographers'
-    | '/$locale/photographers'
     | '/$locale/privacy'
     | '/$locale/report'
     | '/$locale/terms'
@@ -441,11 +463,14 @@ export interface FileRouteTypes {
     | '/$locale/auth/verify'
     | '/$locale/dashboard/profile'
     | '/$locale/dashboard/upload'
+    | '/$locale/photographers/$slug'
     | '/$locale/photos/$slug'
     | '/api/cron/cleanup'
     | '/api/photos/upload'
+    | '/api/profile/avatar'
     | '/$locale/admin/'
     | '/$locale/dashboard/'
+    | '/$locale/photographers/'
     | '/$locale/admin/review/$id'
     | '/$locale/dashboard/photos/$id'
     | '/media/a/$userId/$file'
@@ -459,6 +484,7 @@ export interface RootRouteChildren {
   FilesSplatRoute: typeof FilesSplatRoute
   ApiCronCleanupRoute: typeof ApiCronCleanupRoute
   ApiPhotosUploadRoute: typeof ApiPhotosUploadRoute
+  ApiProfileAvatarRoute: typeof ApiProfileAvatarRoute
   MediaAUserIdFileRoute: typeof MediaAUserIdFileRoute
   MediaPPhotoIdTokenFileRoute: typeof MediaPPhotoIdTokenFileRoute
 }
@@ -526,13 +552,6 @@ declare module '@tanstack/react-router' {
       path: '/for-photographers'
       fullPath: '/$locale/for-photographers'
       preLoaderRoute: typeof LocaleForPhotographersRouteImport
-      parentRoute: typeof LocaleRouteRoute
-    }
-    '/$locale/photographers': {
-      id: '/$locale/photographers'
-      path: '/photographers'
-      fullPath: '/$locale/photographers'
-      preLoaderRoute: typeof LocalePhotographersRouteImport
       parentRoute: typeof LocaleRouteRoute
     }
     '/$locale/privacy': {
@@ -661,6 +680,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleDashboardUploadRouteImport
       parentRoute: typeof LocaleDashboardRouteRoute
     }
+    '/$locale/photographers/': {
+      id: '/$locale/photographers/'
+      path: '/photographers'
+      fullPath: '/$locale/photographers/'
+      preLoaderRoute: typeof LocalePhotographersIndexRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
+    '/$locale/photographers/$slug': {
+      id: '/$locale/photographers/$slug'
+      path: '/photographers/$slug'
+      fullPath: '/$locale/photographers/$slug'
+      preLoaderRoute: typeof LocalePhotographersSlugRouteImport
+      parentRoute: typeof LocaleRouteRoute
+    }
     '/$locale/photos/$slug': {
       id: '/$locale/photos/$slug'
       path: '/photos/$slug'
@@ -680,6 +713,13 @@ declare module '@tanstack/react-router' {
       path: '/api/photos/upload'
       fullPath: '/api/photos/upload'
       preLoaderRoute: typeof ApiPhotosUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/profile/avatar': {
+      id: '/api/profile/avatar'
+      path: '/api/profile/avatar'
+      fullPath: '/api/profile/avatar'
+      preLoaderRoute: typeof ApiProfileAvatarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$locale/admin/review/': {
@@ -767,7 +807,6 @@ interface LocaleRouteRouteChildren {
   LocaleContentRulesRoute: typeof LocaleContentRulesRoute
   LocaleExploreRoute: typeof LocaleExploreRoute
   LocaleForPhotographersRoute: typeof LocaleForPhotographersRoute
-  LocalePhotographersRoute: typeof LocalePhotographersRoute
   LocalePrivacyRoute: typeof LocalePrivacyRoute
   LocaleReportRoute: typeof LocaleReportRoute
   LocaleTermsRoute: typeof LocaleTermsRoute
@@ -778,7 +817,9 @@ interface LocaleRouteRouteChildren {
   LocaleAuthResetRoute: typeof LocaleAuthResetRoute
   LocaleAuthSignupRoute: typeof LocaleAuthSignupRoute
   LocaleAuthVerifyRoute: typeof LocaleAuthVerifyRoute
+  LocalePhotographersSlugRoute: typeof LocalePhotographersSlugRoute
   LocalePhotosSlugRoute: typeof LocalePhotosSlugRoute
+  LocalePhotographersIndexRoute: typeof LocalePhotographersIndexRoute
 }
 
 const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
@@ -788,7 +829,6 @@ const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
   LocaleContentRulesRoute: LocaleContentRulesRoute,
   LocaleExploreRoute: LocaleExploreRoute,
   LocaleForPhotographersRoute: LocaleForPhotographersRoute,
-  LocalePhotographersRoute: LocalePhotographersRoute,
   LocalePrivacyRoute: LocalePrivacyRoute,
   LocaleReportRoute: LocaleReportRoute,
   LocaleTermsRoute: LocaleTermsRoute,
@@ -799,7 +839,9 @@ const LocaleRouteRouteChildren: LocaleRouteRouteChildren = {
   LocaleAuthResetRoute: LocaleAuthResetRoute,
   LocaleAuthSignupRoute: LocaleAuthSignupRoute,
   LocaleAuthVerifyRoute: LocaleAuthVerifyRoute,
+  LocalePhotographersSlugRoute: LocalePhotographersSlugRoute,
   LocalePhotosSlugRoute: LocalePhotosSlugRoute,
+  LocalePhotographersIndexRoute: LocalePhotographersIndexRoute,
 }
 
 const LocaleRouteRouteWithChildren = LocaleRouteRoute._addFileChildren(
@@ -812,6 +854,7 @@ const rootRouteChildren: RootRouteChildren = {
   FilesSplatRoute: FilesSplatRoute,
   ApiCronCleanupRoute: ApiCronCleanupRoute,
   ApiPhotosUploadRoute: ApiPhotosUploadRoute,
+  ApiProfileAvatarRoute: ApiProfileAvatarRoute,
   MediaAUserIdFileRoute: MediaAUserIdFileRoute,
   MediaPPhotoIdTokenFileRoute: MediaPPhotoIdTokenFileRoute,
 }

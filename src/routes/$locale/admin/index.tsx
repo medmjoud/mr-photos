@@ -1,13 +1,20 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
+import { useServerFn } from '@tanstack/react-start'
 import { useTranslations } from 'use-intl'
 import { adminStats } from '@/functions/admin.functions'
+import { decideAvatar, listPendingAvatars } from '@/functions/profile.functions'
+import { Button } from '@/components/ui/Button'
 import { Eyebrow } from '@/components/ui/Editorial'
 import { useAppLocale } from '@/i18n/react'
 import { headTranslator, privateHead } from '@/lib/seo'
 import { cx } from '@/lib/cx'
 
 export const Route = createFileRoute('/$locale/admin/')({
-  loader: () => adminStats(),
+  loader: async () => {
+    const [stats, avatars] = await Promise.all([adminStats(), listPendingAvatars()])
+    return { ...stats, avatars }
+  },
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('admin.title') ?? 'SOURA'),
   component: AdminOverview,
 })
@@ -71,6 +78,52 @@ function AdminOverview() {
           </div>
         ))}
       </dl>
+
+      <PendingAvatars avatars={s.avatars} />
     </div>
+  )
+}
+
+function PendingAvatars({ avatars }: { avatars: Array<{ userId: string; displayName: string; url: string | null }> }) {
+  const t = useTranslations('adminAvatars')
+  const router = useRouter()
+  const decideFn = useServerFn(decideAvatar)
+  const [busy, setBusy] = useState<string | null>(null)
+  return (
+    <section className="mt-14 border-t border-line pt-8" aria-labelledby="avatars-title">
+      <h2 id="avatars-title" className="text-title">
+        {t('title')}
+      </h2>
+      {avatars.length === 0 ? (
+        <p className="mt-3 text-small text-ink-muted">{t('empty')}</p>
+      ) : (
+        <ul className="mt-6 grid gap-6 sm:grid-cols-3 lg:grid-cols-6">
+          {avatars.map((a) => (
+            <li key={a.userId} className="flex flex-col gap-3">
+              <div className="photo-frame aspect-square">{a.url ? <img src={a.url} alt="" /> : null}</div>
+              <p className="truncate text-small font-semibold">{a.displayName}</p>
+              <div className="flex gap-2">
+                {[true, false].map((approve) => (
+                  <Button
+                    key={String(approve)}
+                    size="sm"
+                    variant={approve ? 'secondary' : 'danger'}
+                    busy={busy === a.userId + String(approve)}
+                    onClick={async () => {
+                      setBusy(a.userId + String(approve))
+                      await decideFn({ data: { userId: a.userId, approve } }).catch(() => undefined)
+                      setBusy(null)
+                      await router.invalidate()
+                    }}
+                  >
+                    {approve ? t('approve') : t('reject')}
+                  </Button>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   )
 }

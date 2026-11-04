@@ -27,8 +27,9 @@ const securityMiddleware = createMiddleware().server(async ({ next, request, pat
     if (process.env.NODE_ENV === 'production') {
       headers.set('Content-Security-Policy', contentSecurityPolicy(nonce))
     }
-    // Pages contain the signed-in user's chrome: never share-cache them.
-    if (!headers.has('cache-control')) headers.set('Cache-Control', 'private, no-cache')
+    // Pages contain the signed-in user's chrome: never share-cache them, even
+    // if a server function rendered during SSR asked for public caching.
+    headers.set('Cache-Control', 'private, no-cache')
   }
 
   return {
