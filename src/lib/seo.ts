@@ -9,10 +9,15 @@ export function headTranslator(matches: ReadonlyArray<AnyMatch>) {
   const m = matches.find((x) => x.routeId === '/$locale')
   const data = m?.loaderData as { locale: Locale; messages: Messages; siteUrl: string } | undefined
   if (!data) return null
+  // Signed-in areas load the full catalogue in a nested layout: prefer the deepest one.
+  const deepest = [...matches]
+    .reverse()
+    .map((x) => x.loaderData as { messages?: Messages } | undefined)
+    .find((d) => d?.messages)?.messages
   return {
     locale: data.locale,
     siteUrl: data.siteUrl,
-    t: createTranslator({ locale: data.locale, messages: data.messages }),
+    t: createTranslator({ locale: data.locale, messages: deepest ?? data.messages }),
   }
 }
 
@@ -42,7 +47,7 @@ export function seo(input: SeoInput) {
     { property: 'og:site_name', content: 'SOURA' },
     { property: 'og:type', content: input.type ?? 'website' },
     { property: 'og:locale', content: ogLocale[locale] },
-    { name: 'twitter:card', content: input.image ? 'summary_large_image' : 'summary' },
+    { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: input.title },
   ]
   if (input.description) {
@@ -52,6 +57,8 @@ export function seo(input: SeoInput) {
       { name: 'twitter:description', content: input.description },
     )
   }
+  // Pages without their own photograph share the default SOURA card.
+  input.image ??= { url: `${base}/og-default.jpg`, width: 1200, height: 630, alt: 'SOURA · صورة' }
   if (input.image) {
     meta.push(
       { property: 'og:image', content: input.image.url },

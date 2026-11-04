@@ -1,14 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { Eyebrow } from '@/components/ui/Editorial'
 import { Icon } from '@/components/ui/Icon'
 import { Notice } from '@/components/ui/Notice'
 import { headTranslator, privateHead } from '@/lib/seo'
+import { idParam } from '@/lib/search-params'
 
 /** Instructions shown after (and available before) the child-safety procedure. LEGAL REVIEW REQUIRED. */
 export const Route = createFileRoute('/$locale/admin/child-safety')({
-  validateSearch: z.object({ ref: z.string().regex(/^[a-z0-9]{16}$/).optional() }),
+  validateSearch: (s: Record<string, unknown>): { ref?: string } => ({ ref: idParam(s.ref) }),
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('admin.childSafety.title') ?? 'SOURA'),
   component: ChildSafetyPage,
 })

@@ -1,10 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { locales } from '@/i18n/config'
 import { getDb, schema } from '@/server/db/client'
 import { newId } from '@/server/crypto'
-import { dummyHash, hashPassword, PASSWORD_MAX, PASSWORD_MIN, verifyPassword } from '@/server/auth/password'
+import { dummyHash, hashPassword, PASSWORD_MAX, verifyPassword } from '@/server/auth/password'
 import {
   consumeToken,
   createSession,
@@ -14,20 +13,13 @@ import {
   revokeAllSessions,
 } from '@/server/auth/session'
 import { fail } from '@/server/http'
+import { zEmail as email, zLocale as locale, zPassword as password } from '@/server/validation'
 import { consumeAll } from '@/server/ratelimit'
 import { requestIp } from '@/server/request'
 import { sendExistingAccountEmail, sendResetEmail, sendVerificationEmail } from '@/server/email'
 import { uniqueProfileSlug } from '@/server/profiles'
 import { cleanLine } from '@/lib/text'
 
-const email = z
-  .string()
-  .trim()
-  .toLowerCase()
-  .max(254)
-  .pipe(z.email())
-const password = z.string().min(PASSWORD_MIN).max(PASSWORD_MAX)
-const locale = z.enum(locales)
 
 async function limit(rules: Array<{ key: string; limit: number; windowSeconds: number }>) {
   const res = await consumeAll(rules)

@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslations } from 'use-intl'
 import { categories } from '@/lib/categories'
 import { regions } from '@/lib/regions'
-import { DESCRIPTION_MAX, TITLE_MAX } from '@/lib/schemas'
+import { DESCRIPTION_MAX, TITLE_MAX } from '@/lib/limits'
 import { useAppLocale } from '@/i18n/react'
 import { Checkbox, Field, Input, RadioGroup, Select, Textarea } from '../ui/Field'
 

@@ -11,16 +11,12 @@ import { requestIp, requestUserAgent, visitorHash } from '@/server/request'
 import { createReport } from '@/server/moderation/service'
 import { ensureWorker } from '@/server/jobs/photos'
 import { fail } from '@/server/http'
+import { exploreSearchSchema, zId as photoId, zLocale as locale, zSlug as slug } from '@/server/validation'
 import { serverTranslator } from '@/i18n/server'
-import { locales } from '@/i18n/config'
-import { categorySlugs, orientations } from '@/lib/categories'
-import { regionSlugs, regions } from '@/lib/regions'
+import { regions } from '@/lib/regions'
 import { REPORT_REASONS } from '@/lib/codes'
 import { cleanMultiline, idFromSegment, searchTerms } from '@/lib/text'
 
-const locale = z.enum(locales)
-const photoId = z.string().regex(/^[a-z0-9]{16}$/)
-const slug = z.string().regex(/^[a-z0-9-]{1,80}$/)
 export const PAGE_SIZE = 24
 
 function publicCache() {
@@ -41,14 +37,6 @@ function owner(r: { slug: string; displayName: string; profileDemo: boolean }) {
 
 /* -------------------------------------------------------------- explore */
 
-export const exploreSearchSchema = z.object({
-  q: z.string().max(100).optional(),
-  region: z.enum(regionSlugs).optional(),
-  category: z.enum(categorySlugs).optional(),
-  orientation: z.enum(orientations).optional(),
-  photographer: slug.optional(),
-  page: z.number().int().min(1).max(500).optional(),
-})
 
 export const explorePhotos = createServerFn({ method: 'GET' })
   .validator(exploreSearchSchema.extend({ locale }))

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { login, resendVerification } from '@/functions/auth.functions'
 import { AuthShell } from '@/components/layout/AuthShell'
 import { Button } from '@/components/ui/Button'
@@ -11,9 +10,10 @@ import { Notice } from '@/components/ui/Notice'
 import { useAppLocale, useErrorText } from '@/i18n/react'
 import { headTranslator, privateHead } from '@/lib/seo'
 import { safeNext } from '@/lib/nav'
+import { str } from '@/lib/search-params'
 
 export const Route = createFileRoute('/$locale/auth/login')({
-  validateSearch: z.object({ next: z.string().optional() }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } => ({ next: str(s.next, 500) }),
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('auth.loginTitle') ?? 'SOURA'),
   component: LoginPage,
 })

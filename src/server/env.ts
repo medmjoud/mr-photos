@@ -59,6 +59,8 @@ const schema = z.object({
   PREVIEW_LONG_EDGE: int(1600),
 
   REPORT_AUTOHIDE_THRESHOLD: int(3),
+  /** Test-only: multiplies every rate limit (ignored in production). */
+  RATE_LIMIT_MULTIPLIER: int(1),
   REJECTED_RETENTION_DAYS: int(7),
 
   /** How to read the client IP: "none" (socket), "cloudflare" (CF-Connecting-IP), "xff" (first X-Forwarded-For). */

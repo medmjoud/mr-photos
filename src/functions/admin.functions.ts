@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { getDb, schema } from '@/server/db/client'
 import { requireAdmin } from '@/server/auth/guards'
 import { fail } from '@/server/http'
+import { zId as id, zNote as note } from '@/server/validation'
 import { storage } from '@/server/storage'
 import { ensureWorker } from '@/server/jobs/photos'
 import { env } from '@/server/env'
@@ -27,7 +28,6 @@ import { ALT_MAX, isUrgentForReview, shouldBlurForModerator } from '@/lib/modera
 import { REJECTION_REASONS, type Photo } from '@/server/db/schema'
 import { photoSegment } from '@/lib/text'
 
-const id = z.string().regex(/^[a-z0-9]{16}$/)
 
 async function run<T>(fn: () => Promise<T>): Promise<T> {
   try {
@@ -276,7 +276,6 @@ export const reviewItem = createServerFn({ method: 'GET' })
 
 /* -------------------------------------------------------------- actions */
 
-const note = z.string().max(1000).default('')
 
 export const approve = createServerFn({ method: 'POST' })
   .middleware([requireAdmin])

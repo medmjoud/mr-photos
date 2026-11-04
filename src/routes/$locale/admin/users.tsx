@@ -2,18 +2,21 @@ import { useState } from 'react'
 import { Link, createFileRoute, useLoaderData, useNavigate, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useFormatter, useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { featurePhotographer, listUsers, reinstate, suspend } from '@/functions/admin.functions'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Field'
 import { Notice } from '@/components/ui/Notice'
 import { useAppLocale, useErrorText } from '@/i18n/react'
 import { headTranslator, privateHead } from '@/lib/seo'
+import { oneOf, str } from '@/lib/search-params'
 
 const STATUSES = ['all', 'active', 'suspended'] as const
 
 export const Route = createFileRoute('/$locale/admin/users')({
-  validateSearch: z.object({ q: z.string().max(100).optional(), status: z.enum(STATUSES).optional() }),
+  validateSearch: (s: Record<string, unknown>): { q?: string; status?: (typeof STATUSES)[number] } => ({
+    q: str(s.q, 100),
+    status: oneOf(s.status, STATUSES),
+  }),
   loaderDeps: ({ search }) => ({ q: search.q ?? '', status: search.status ?? 'all' }),
   loader: ({ deps }) => listUsers({ data: deps }),
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('admin.users.title') ?? 'SOURA'),

@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { getDb, schema } from '@/server/db/client'
 import { requireAdmin, requireUser } from '@/server/auth/guards'
 import { fail } from '@/server/http'
+import { zInstagram as instagram, zWebsite as website, zWhatsapp as whatsapp } from '@/server/validation'
 import { storage, deleteKeys } from '@/server/storage'
 import { logAction } from '@/server/moderation/log'
 import { newId } from '@/server/crypto'
@@ -36,21 +37,6 @@ export const getMyProfile = createServerFn({ method: 'GET' })
     }
   })
 
-const website = z
-  .string()
-  .trim()
-  .max(200)
-  .refine((v) => v === '' || /^https:\/\/[^\s]+\.[^\s]+$/i.test(v), 'https_only')
-const instagram = z
-  .string()
-  .trim()
-  .transform((v) => v.replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/\/$/, ''))
-  .pipe(z.string().regex(/^[A-Za-z0-9._]{0,30}$/))
-/** E.164 digits without "+", e.g. 22236123456 (Mauritania +222). */
-const whatsapp = z
-  .string()
-  .transform((v) => v.replace(/[\s().-]/g, '').replace(/^\+/, '').replace(/^00/, ''))
-  .pipe(z.string().regex(/^(\d{8,15})?$/))
 
 export const updateMyProfile = createServerFn({ method: 'POST' })
   .middleware([requireUser])

@@ -2,15 +2,15 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { resendVerification } from '@/functions/auth.functions'
 import { AuthShell } from '@/components/layout/AuthShell'
 import { Button } from '@/components/ui/Button'
 import { Notice } from '@/components/ui/Notice'
 import { headTranslator, privateHead } from '@/lib/seo'
+import { str } from '@/lib/search-params'
 
 export const Route = createFileRoute('/$locale/auth/check-email')({
-  validateSearch: z.object({ email: z.string().max(254).optional() }),
+  validateSearch: (s: Record<string, unknown>): { email?: string } => ({ email: str(s.email, 254) }),
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('auth.checkEmailTitle') ?? 'SOURA'),
   component: CheckEmailPage,
 })

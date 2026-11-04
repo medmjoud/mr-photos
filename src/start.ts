@@ -32,15 +32,35 @@ const securityMiddleware = createMiddleware().server(async ({ next, request, pat
     headers.set('Cache-Control', 'private, no-cache')
   }
 
+  let body: ReadableStream<Uint8Array> | null = result.response.body
+  if (body && shouldCompress(request, headers)) {
+    body = body.pipeThrough(new CompressionStream('gzip') as unknown as TransformStream<Uint8Array, Uint8Array>)
+    headers.set('Content-Encoding', 'gzip')
+    headers.delete('Content-Length')
+    headers.append('Vary', 'Accept-Encoding')
+  }
+
   return {
     ...result,
-    response: new Response(result.response.body, {
+    response: new Response(body as BodyInit | null, {
       status: result.response.status,
       statusText: result.response.statusText,
       headers,
     }),
   }
 })
+
+const COMPRESSIBLE = /^(text\/|application\/(json|xml|javascript|x-tss|x-ndjson)|image\/svg\+xml)/
+
+/** On-the-fly gzip for dynamic text responses (static assets are pre-compressed at build). */
+function shouldCompress(request: Request, headers: Headers): boolean {
+  if (headers.has('content-encoding')) return false
+  if (!/\bgzip\b/.test(request.headers.get('accept-encoding') ?? '')) return false
+  const type = headers.get('content-type') ?? ''
+  if (!COMPRESSIBLE.test(type) || type.includes('event-stream')) return false
+  const length = Number(headers.get('content-length') ?? 'NaN')
+  return Number.isNaN(length) || length > 1024
+}
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [securityMiddleware],

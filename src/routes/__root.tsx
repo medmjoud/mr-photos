@@ -9,6 +9,8 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
+      // Default title (404 and error pages); every route head overrides it.
+      { title: 'SOURA · صورة' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
       { name: 'theme-color', content: '#0b0d11' },
       { name: 'color-scheme', content: 'dark light' },

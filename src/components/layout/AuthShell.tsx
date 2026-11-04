@@ -7,8 +7,8 @@ export function AuthShell({ title, lead, children }: { title: ReactNode; lead?: 
   return (
     <div className="container-page grid gap-12 py-12 md:grid-cols-12 md:py-20">
       <aside className="hidden flex-col justify-between border-e border-line pe-10 md:col-span-5 md:flex">
-        <p className="font-display text-display-lg text-ink-muted italic">{meta('tagline')}</p>
-        <p aria-hidden className="font-display text-[clamp(6rem,14vw,12rem)] leading-none text-surface-2">
+        <p className="font-display text-display-lg text-ink-muted">{meta('tagline')}</p>
+        <p aria-hidden className="text-[clamp(6rem,14vw,12rem)] leading-none text-surface-2" style={{ fontFamily: "'Soura Wordmark Arabic', serif" }}>
           ص
         </p>
       </aside>

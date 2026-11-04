@@ -1,6 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useFormatter, useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { QUEUE_FILTERS, reviewQueue } from '@/functions/admin.functions'
 import { ModeratorPreview } from '@/components/admin/ModeratorPreview'
 import { EmptyState } from '@/components/ui/Editorial'
@@ -9,11 +8,12 @@ import { StatusBadge } from '@/components/ui/StatusBadge'
 import { useAppLocale } from '@/i18n/react'
 import { regionName } from '@/lib/regions'
 import { headTranslator, privateHead } from '@/lib/seo'
+import { oneOf, posInt } from '@/lib/search-params'
 
 export const Route = createFileRoute('/$locale/admin/review/')({
-  validateSearch: z.object({
-    filter: z.enum(QUEUE_FILTERS).optional(),
-    page: z.number().int().min(1).optional(),
+  validateSearch: (s: Record<string, unknown>): { filter?: (typeof QUEUE_FILTERS)[number]; page?: number } => ({
+    filter: oneOf(s.filter, QUEUE_FILTERS),
+    page: posInt(s.page),
   }),
   loaderDeps: ({ search }) => ({ filter: search.filter ?? 'pending', page: search.page ?? 1 }),
   loader: ({ deps }) => reviewQueue({ data: deps }),

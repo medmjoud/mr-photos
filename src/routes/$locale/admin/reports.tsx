@@ -2,18 +2,18 @@ import { useState } from 'react'
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useFormatter, useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { listReports, resolveReport } from '@/functions/admin.functions'
 import { EmptyState } from '@/components/ui/Editorial'
 import { Button } from '@/components/ui/Button'
 import { useAppLocale } from '@/i18n/react'
 import { headTranslator, privateHead } from '@/lib/seo'
+import { oneOf } from '@/lib/search-params'
 import { cx } from '@/lib/cx'
 
 const STATUSES = ['open', 'resolved', 'dismissed'] as const
 
 export const Route = createFileRoute('/$locale/admin/reports')({
-  validateSearch: z.object({ status: z.enum(STATUSES).optional() }),
+  validateSearch: (s: Record<string, unknown>): { status?: (typeof STATUSES)[number] } => ({ status: oneOf(s.status, STATUSES) }),
   loaderDeps: ({ search }) => ({ status: search.status ?? 'open' }),
   loader: ({ deps }) => listReports({ data: deps }),
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('admin.reports.title') ?? 'SOURA'),

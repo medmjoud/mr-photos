@@ -1,4 +1,5 @@
 import { getClient, getDb } from './db/client'
+import { env } from './env'
 
 export type RateLimitResult = { ok: boolean; remaining: number; resetAt: number }
 
@@ -22,7 +23,9 @@ export async function consume(key: string, limit: number, windowSeconds: number)
   const row = res.rows[0]
   const count = Number(row?.count ?? 1)
   const reset = Number(row?.reset_at ?? resetAt)
-  return { ok: count <= limit, remaining: Math.max(0, limit - count), resetAt: reset }
+  const e = env()
+  const effective = e.isProduction ? limit : limit * Math.max(1, e.RATE_LIMIT_MULTIPLIER)
+  return { ok: count <= effective, remaining: Math.max(0, effective - count), resetAt: reset }
 }
 
 /** Consumes several limits; fails if any is exceeded. */

@@ -17,6 +17,7 @@ export function Photo({
   blur,
   sizes,
   priority = false,
+  eager = false,
   className,
   imgClassName,
   fit = 'cover',
@@ -29,6 +30,8 @@ export function Photo({
   blur?: string | null
   sizes: string
   priority?: boolean
+  /** Not lazy (above the fold) but without high fetch priority. */
+  eager?: boolean
   className?: string
   imgClassName?: string
   fit?: 'cover' | 'contain'
@@ -48,7 +51,7 @@ export function Photo({
         alt={alt}
         width={width}
         height={height}
-        loading={priority ? 'eager' : 'lazy'}
+        loading={priority || eager ? 'eager' : 'lazy'}
         decoding={priority ? 'sync' : 'async'}
         fetchPriority={priority ? 'high' : 'auto'}
         className={cx(fit === 'contain' ? 'object-contain!' : undefined, imgClassName)}

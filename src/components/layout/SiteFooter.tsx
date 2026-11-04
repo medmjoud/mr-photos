@@ -42,7 +42,7 @@ export function SiteFooter() {
       <div className="container-page grid gap-12 py-16 md:grid-cols-12">
         <div className="md:col-span-5">
           <Wordmark size="xl" />
-          <p className="mt-6 max-w-[38ch] font-display text-title italic text-ink-muted">{meta('tagline')}</p>
+          <p className="mt-6 max-w-[38ch] font-display text-title text-ink-muted">{meta('tagline')}</p>
           <p className="mt-6 max-w-[48ch] text-small text-ink-muted">{t('statement')}</p>
         </div>
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-7">

@@ -32,7 +32,8 @@ export default defineConfig({
   plugins: [
     devServerRoutes(),
     tanstackStart(),
-    nitro(),
+    // Pre-compress static assets (gzip + brotli); dynamic responses are gzipped in src/start.ts.
+    nitro({ compressPublicAssets: { gzip: true, brotli: true } }),
     tailwindcss(),
     viteReact(),
   ],

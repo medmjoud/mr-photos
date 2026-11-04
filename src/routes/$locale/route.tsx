@@ -4,6 +4,8 @@ import frauncesLatin from '@fontsource-variable/fraunces/files/fraunces-latin-op
 import schibstedLatin from '@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2?url'
 import plexArabic from '@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-400-normal.woff2?url'
 import markaziArabic from '@fontsource-variable/markazi-text/files/markazi-text-arabic-wght-normal.woff2?url'
+import wordmarkLatin from '@/assets/fonts/wordmark-latin.woff2?url'
+import wordmarkArabic from '@/assets/fonts/wordmark-arabic.woff2?url'
 import { isLocale, type Locale } from '@/i18n/config'
 import { loadMessages } from '@/i18n/load'
 import { getShell } from '@/functions/shell.functions'
@@ -26,7 +28,7 @@ export const Route = createFileRoute('/$locale')({
   staleTime: Number.POSITIVE_INFINITY,
   head: ({ loaderData }) => {
     const ar = loaderData?.locale === 'ar'
-    const fonts = ar ? [plexArabic, markaziArabic] : [schibstedLatin, frauncesLatin]
+    const fonts = [...(ar ? [plexArabic, markaziArabic] : [schibstedLatin, frauncesLatin]), wordmarkLatin, wordmarkArabic]
     return {
       links: fonts.map((href) => ({
         rel: 'preload',

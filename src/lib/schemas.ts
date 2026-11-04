@@ -3,12 +3,13 @@ import { categorySlugs } from './categories'
 import { regionSlugs } from './regions'
 import { cleanLine, cleanMultiline, parseTags } from './text'
 
+import { DESCRIPTION_MAX, TITLE_MAX } from './limits'
+
 /** Shared (client + server) validation for photo metadata. The server is authoritative. */
 const yesNo = z.enum(['yes', 'no']).transform((v) => v === 'yes')
 const confirmed = z.enum(['true', 'on']).transform(() => true)
 
-export const TITLE_MAX = 120
-export const DESCRIPTION_MAX = 2000
+export { DESCRIPTION_MAX, TITLE_MAX }
 
 export function photoMetaSchema(now = new Date()) {
   return z

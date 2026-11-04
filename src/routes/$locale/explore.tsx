@@ -1,19 +1,36 @@
 import { useState } from 'react'
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslations } from 'use-intl'
-import { exploreSearchSchema, explorePhotos } from '@/functions/public.functions'
+import { explorePhotos } from '@/functions/public.functions'
+import { oneOf, posInt, slugParam, str } from '@/lib/search-params'
+import { categorySlugs, orientations as orientationList, categories } from '@/lib/categories'
+import { getRegion, regionSlugs, regions } from '@/lib/regions'
 import { Masonry } from '@/components/photo/PhotoTile'
 import { EmptyState, Eyebrow } from '@/components/ui/Editorial'
 import { Icon } from '@/components/ui/Icon'
 import { Input, Select } from '@/components/ui/Field'
 import { useAppLocale } from '@/i18n/react'
-import { categories, orientations } from '@/lib/categories'
-import { getRegion, regions } from '@/lib/regions'
 import { headTranslator, seo } from '@/lib/seo'
 import { isLocale } from '@/i18n/config'
 
+type ExploreSearch = {
+  q?: string
+  region?: string
+  category?: string
+  orientation?: (typeof orientationList)[number]
+  photographer?: string
+  page?: number
+}
+
 export const Route = createFileRoute('/$locale/explore')({
-  validateSearch: exploreSearchSchema,
+  validateSearch: (s: Record<string, unknown>): ExploreSearch => ({
+    q: str(s.q, 100),
+    region: oneOf(s.region, regionSlugs),
+    category: oneOf(s.category, categorySlugs),
+    orientation: oneOf(s.orientation, orientationList),
+    photographer: slugParam(s.photographer),
+    page: posInt(s.page),
+  }),
   loaderDeps: ({ search }) => search,
   loader: ({ deps, params }) => explorePhotos({ data: { ...deps, locale: isLocale(params.locale) ? params.locale : 'fr' } }),
   head: ({ matches, params, loaderData, match }) => {
@@ -130,7 +147,7 @@ function Explore() {
             onChange={(e) => go({ orientation: (e.target.value || undefined) as never })}
           >
             <option value="">{t('allOrientations')}</option>
-            {orientations.map((o) => (
+            {orientationList.map((o) => (
               <option key={o} value={o}>
                 {t(`orientations.${o}`)}
               </option>

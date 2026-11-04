@@ -23,6 +23,8 @@ const env = {
   EMAIL_PROVIDER: 'console',
   MODERATION_PROVIDER: 'mock',
   REPORT_AUTOHIDE_THRESHOLD: '2',
+  // Many signups/logins come from one IP during the suite.
+  RATE_LIMIT_MULTIPLIER: '20',
   UPLOAD_MIN_LONG_EDGE: '1200',
   UPLOAD_MIN_SHORT_EDGE: '800',
   CRON_SECRET: 'e2e-cron-secret-0123456789',

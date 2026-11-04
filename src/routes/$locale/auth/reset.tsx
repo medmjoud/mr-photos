@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
 import { useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { resetPassword } from '@/functions/auth.functions'
 import { AuthShell } from '@/components/layout/AuthShell'
 import { Button } from '@/components/ui/Button'
@@ -10,9 +9,10 @@ import { Field, Input } from '@/components/ui/Field'
 import { Notice } from '@/components/ui/Notice'
 import { useAppLocale, useErrorText } from '@/i18n/react'
 import { headTranslator, privateHead } from '@/lib/seo'
+import { str } from '@/lib/search-params'
 
 export const Route = createFileRoute('/$locale/auth/reset')({
-  validateSearch: z.object({ token: z.string().max(100).optional() }),
+  validateSearch: (s: Record<string, unknown>): { token?: string } => ({ token: str(s.token, 100) }),
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('auth.resetTitle') ?? 'SOURA'),
   component: ResetPage,
 })

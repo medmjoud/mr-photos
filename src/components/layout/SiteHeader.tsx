@@ -64,8 +64,9 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/$locale" params={{ locale }} aria-label={t('home')} className="shrink-0">
+        <Link to="/$locale" params={{ locale }} className="shrink-0">
           <Wordmark />
+          <span className="sr-only"> — {t('home')}</span>
         </Link>
 
         <nav aria-label={t('primary')} className="hidden lg:block">

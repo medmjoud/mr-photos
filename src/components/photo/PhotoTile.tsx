@@ -10,10 +10,12 @@ export function PhotoTile({
   photo,
   sizes = '(min-width: 88rem) 25vw, (min-width: 56rem) 33vw, (min-width: 26rem) 50vw, 100vw',
   priority = false,
+  eager = false,
 }: {
   photo: PublicPhoto
   sizes?: string
   priority?: boolean
+  eager?: boolean
 }) {
   const locale = useAppLocale()
   const t = useTranslations('photo')
@@ -32,6 +34,7 @@ export function PhotoTile({
         blur={photo.blur}
         sizes={sizes}
         priority={priority}
+        eager={eager}
         className="img-zoom scrim"
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-3 text-white sm:p-4 hover-device:translate-y-2 hover-device:opacity-0 hover-device:transition hover-device:duration-300 hover-device:group-hover:translate-y-0 hover-device:group-hover:opacity-100 hover-device:group-focus-visible:translate-y-0 hover-device:group-focus-visible:opacity-100">
@@ -54,7 +57,7 @@ export function Masonry({ photos, priorityCount = 0 }: { photos: Array<PublicPho
     <ul className="masonry">
       {photos.map((p, i) => (
         <li key={p.id}>
-          <PhotoTile photo={p} priority={i < priorityCount} />
+          <PhotoTile photo={p} priority={i < priorityCount} eager={i < priorityCount + 4} />
         </li>
       ))}
     </ul>

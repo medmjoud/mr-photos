@@ -1,13 +1,13 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useFormatter, useTranslations } from 'use-intl'
-import { z } from 'zod'
 import { listLog } from '@/functions/admin.functions'
 import { EmptyState } from '@/components/ui/Editorial'
 import { useAppLocale } from '@/i18n/react'
 import { headTranslator, privateHead } from '@/lib/seo'
+import { posInt } from '@/lib/search-params'
 
 export const Route = createFileRoute('/$locale/admin/log')({
-  validateSearch: z.object({ page: z.number().int().min(1).optional() }),
+  validateSearch: (s: Record<string, unknown>): { page?: number } => ({ page: posInt(s.page, 1000) }),
   loaderDeps: ({ search }) => ({ page: search.page ?? 1 }),
   loader: ({ deps }) => listLog({ data: deps }),
   head: ({ matches }) => privateHead(headTranslator(matches)?.t('admin.log.title') ?? 'SOURA'),
